@@ -17,7 +17,7 @@ st.set_page_config(
     page_title="Strategic Market Research | IVIG & Emergent",
     page_icon="📈",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed", # Disables native sidebar permanently
 )
 
 # =========================
@@ -38,13 +38,12 @@ PREVIEW_NOTE = (
     "market share revenues have been intentionally masked and abstracted into Tiers."
 )
 
+@st.cache_data
 def load_logo_base64() -> str | None:
     candidates = [
         Path("smrlogonew.svg"), 
         Path(__file__).with_name("smrlogonew.svg"), 
-        Path.cwd() / "smrlogonew.svg", 
-        Path("logo.svg"), 
-        Path(__file__).with_name("logo.svg")
+        Path.cwd() / "smrlogonew.svg"
     ]
     for path in candidates:
         if path.exists():
@@ -179,7 +178,8 @@ st.markdown(
       background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
       transform: rotate(-45deg);
     }}
-    .hero h2 {{ margin: 0; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
+    .hero h2 {{ margin: 0; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; z-index: 2; }}
+    .hero p {{ position: relative; z-index: 2; }}
     
     /* GLASSMORPHISM DATA CARDS */
     .metric-card {{
@@ -273,12 +273,17 @@ def chart_theme(fig):
     return fig
 
 def brand_sidebar():
-    logo_html = f'<img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:48px; width:auto; margin-bottom:12px;" />' if LOGO_B64 else ""
-    st.sidebar.markdown(f'<div class="smr-brand">{logo_html}<h1 style="color:{BURGUNDY}; margin:0; font-size:1.1rem; font-weight:800; letter-spacing:-0.02em; line-height:1.2;">Strategic Market Research</h1><p style="color:{MUTED}; margin:4px 0 0 0; font-size:0.82rem; font-weight:500;">Emergent BioSolutions<br>Advisory Board</p></div>', unsafe_allow_html=True)
+    if LOGO_B64:
+        st.sidebar.markdown(f'<img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:48px; width:auto; margin-bottom:12px;" />', unsafe_allow_html=True)
+    st.sidebar.markdown(f'<div class="smr-brand"><h1 style="color:{BURGUNDY}; margin:0; font-size:1.1rem; font-weight:800; letter-spacing:-0.02em; line-height:1.2;">Strategic Market Research</h1><p style="color:{MUTED}; margin:4px 0 0 0; font-size:0.82rem; font-weight:500;">Emergent BioSolutions<br>Advisory Board</p></div>', unsafe_allow_html=True)
 
 def page_header(title: str, subtitle: str):
-    logo_html = f'<img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:42px; width:auto; filter: brightness(0) invert(1);" />' if LOGO_B64 else ""
-    st.markdown(f'<div class="hero"><div class="kicker" style="color:var(--gold); font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; display:inline-block;">Strategic Market Research</div><div class="hero-head">{logo_html}<h2>{title}</h2></div><p style="font-size: 1rem; color: rgba(255,255,255,0.9); margin:0; max-width:900px; line-height:1.5;">{subtitle}</p></div>', unsafe_allow_html=True)
+    if LOGO_B64:
+        logo_html = f'<img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:42px; width:auto; filter: brightness(0) invert(1); z-index:2; position:relative;" />'
+    else:
+        logo_html = ""
+        
+    st.markdown(f'<div class="hero"><div class="kicker" style="color:var(--gold); font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; display:inline-block; z-index:2; position:relative;">Strategic Market Research</div><div class="hero-head">{logo_html}<h2>{title}</h2></div><p style="font-size: 1rem; color: rgba(255,255,255,0.9); margin:0; max-width:900px; line-height:1.5; z-index:2; position:relative;">{subtitle}</p></div>', unsafe_allow_html=True)
 
 def page_footer():
     st.markdown(f'<div style="margin-top:30px; text-align:center; padding: 24px; color:{MUTED}; font-size:0.8rem; border-top: 1px solid rgba(0,0,0,0.06);"><strong>Strategic Market Research</strong> &copy; {datetime.now().year} — {PREVIEW_NOTE}</div>', unsafe_allow_html=True)
@@ -295,65 +300,107 @@ def log_access(name: str, email: str):
     except Exception: pass
 
 # =========================
-# DATA ENGINE (Built-in, No Excel Required)
+# DATA ENGINE (Built-in, Fully Expanded)
 # =========================
 @st.cache_data(show_spinner=False)
 def load_data():
     data = {}
-    # 1. Market Dynamics
+    
+    # 1. Market Dynamics & Forecast
     data["market"] = pd.DataFrame({
         "Year": ["2025", "2027", "2029", "2031", "2033", "2035"],
         "Revenue ($Mn)": [13090.5, 14545.9, 16104.7, 17937.1, 19830.4, 21962.2],
-        "Volume (Mn g)": [298.8, 335.5, 375.4, 401.7, 411.0, 418.9]
+        "Volume (Mn g)": [298.8, 335.5, 375.4, 401.7, 411.0, 418.9],
+        "Pre-Erosion Demand (Mn g)": [298.8, 335.5, 381.0, 420.0, 450.0, 486.4],
+        "Available Supply (Mn g)": [317.1, 350.0, 390.0, 425.2, 480.0, 570.9]
     })
     
     # 2. Indications
     data["indications"] = pd.DataFrame({
-        "Indication": ["Immunology (PI)", "Neurology (CIDP)", "Neurology (MG)", "Hematology (ITP)", "Others / Uncaptured"],
+        "Indication": ["Immunology (PI)", "Neurology (CIDP)", "Neurology (MG)", "Hematology (ITP)", "Others / Off-Label"],
         "2025 Rev ($Mn)": [2164.0, 2590.3, 358.5, 128.0, 6614.6],
+        "2030 Rev ($Mn)": [2876.4, 3012.0, 380.0, 140.7, 8984.7],
         "2035 Rev ($Mn)": [3821.2, 3535.1, 412.8, 153.1, 12171.2],
-        "CAGR": ["5.8%", "3.2%", "1.4%", "1.8%", "6.3%"],
-        "Disruption Risk": ["Low", "High (FcRn)", "Critical", "Moderate", "Low"]
+        "CAGR (25-35)": ["5.8%", "3.2%", "1.4%", "1.8%", "6.3%"],
+        "Disruption Risk": ["Low", "High (FcRn)", "Critical (FcRn)", "Moderate", "Low"]
     })
     
-    # 3. Value Chain Margin
+    # 3. Patient Funnel (Epidemiology)
+    data["funnel"] = pd.DataFrame({
+        "Indication": ["PI & Serious Infection", "CIDP", "Myasthenia Gravis", "Kawasaki Disease"],
+        "US Modeled Cases": [54560, 52514, 65643, 3069],
+        "Diagnosed (%)": [72.0, 78.0, 78.0, 95.0],
+        "Treated (%)": [86.0, 70.0, 78.0, 90.0],
+        "Eligible (%)": [92.0, 75.0, 100.0, 100.0],
+        "IVIG Penetration (%)": [65.0, 60.0, 40.0, 90.0],
+        "Annual Dose (g)": [450, 1000, 180, 36]
+    })
+    
+    # 4. Standard of Care Cost (Context for Psychedelics/Neurology)
+    data["soc"] = pd.DataFrame({
+        "Modality": ["Oral AD / Augmentation", "Psychotherapy", "TMS / ECT", "Spravato / Ketamine", "High-Dose IVIG (CIDP)"],
+        "Treatment Mix (%)": [35.0, 15.0, 10.0, 40.0, 100.0],
+        "Annual Cost per Patient ($)": [2000, 3500, 8500, 23000, 50000]
+    })
+    
+    # 5. Value Chain & Profit Pools
     data["value_chain"] = pd.DataFrame({
         "Value Chain Layer": ["Plasma Collection", "Fractionation", "Fill-Finish (CDMO)", "Brand & Distribution"],
-        "EBITDA Margin": [16.0, 28.0, 20.0, 18.0],
+        "Revenue Split (%)": [24.0, 34.0, 12.0, 30.0],
+        "EBITDA Margin (%)": [16.0, 28.0, 20.0, 18.0],
         "Capital Risk": ["Very High", "Extreme ($400M+)", "Moderate", "Low"]
     })
 
-    # 4. Regional
+    # 6. Delivery Economics (Scalability)
+    data["economics"] = pd.DataFrame({
+        "Care Model Paradigm": ["All-Day Clinic (Baseline)", "Half-Day Clinic", "Short Clinic", "Take-Home Low-Dose"],
+        "Duration Reduction (%)": [0, 65, 80, 95],
+        "Cost Compression (%)": [0, 40, 60, 85],
+        "Throughput Expansion": [1.0, 2.5, 5.0, 10.0]
+    })
+    
+    # 7. Clinical Pipeline (FcRn Risk)
+    data["pipeline"] = pd.DataFrame({
+        "Asset / Molecule": ["Efgartigimod (Vyvgart)", "Rozanolixizumab", "Nipocalimab", "Batoclimab", "Pozelimab"],
+        "Mechanism": ["FcRn Inhibitor", "FcRn Inhibitor", "FcRn Inhibitor", "FcRn Inhibitor", "Complement C5"],
+        "Key Indications": ["MG, CIDP, ITP", "MG", "MG, SLE", "MG (China)", "MG"],
+        "Status / Launch": ["Approved (Expanding)", "Approved", "Phase 3 / Appr", "Phase 3", "2026 Submission"]
+    })
+
+    # 8. Regional
     data["regions"] = pd.DataFrame({
         "Region": ["United States", "Asia Pacific", "Europe", "Latin America", "Middle East & Africa"],
         "2025 Rev ($Mn)": [4387.7, 4218.6, 2816.5, 860.5, 807.2],
         "2035 Rev ($Mn)": [7527.3, 7010.2, 4488.7, 1505.6, 1430.5],
+        "CAGR (%)": [5.5, 5.2, 4.8, 5.8, 5.9],
+        "Supply Coverage": [2.94, 0.48, 0.92, 0.35, 0.20],
         "Map Proxy": ["USA", "CHN", "DEU", "BRA", "ZAF"]
     })
 
-    # 5. Competitors (MASKED)
+    # 9. Competitors (MASKED for Security)
     data["competitors"] = pd.DataFrame({
         "Market Tier": ["Tier 1 Leaders (Top 2)", "Tier 2 Majors (Next 2)", "Mid-Tier Challengers"],
         "Market Share (%)": [47.0, 33.0, 20.0],
         "Strategic Moat": ["Extreme (400+ Centers)", "High (Integrated)", "Low (3rd Party Plasma)"]
     })
 
-    # 6. Emergent Strategy
+    # 10. Emergent Strategy Matrix
     data["emergent"] = pd.DataFrame({
-        "Strategic Pathway": ["Adjacency (Hyper/MCM)", "CDMO / Fill-Finish", "Direct Pooled-IVIG"],
-        "2030 TAM ($Mn)": [3308.0, 1963.6, 20244.6],
-        "2035 Rev Potential ($Mn)": [232.8, 99.1, 34.4],
-        "EBITDA Target": ["28.0%", "22.0%", "14.0%"],
-        "Execution Risk": ["Moderate", "Moderate", "Very High"]
+        "Strategic Pathway": ["Adjacency (Hyper/MCM)", "CDMO / Fill-Finish", "Partnered Specialty Ig", "Direct Pooled-IVIG"],
+        "2030 TAM ($Mn)": [3308.0, 1963.6, 4282.3, 20244.6],
+        "2035 Rev Potential ($Mn)": [232.8, 99.1, 41.3, 34.4],
+        "EBITDA Target": ["28.0%", "22.0%", "18.0%", "14.0%"],
+        "Emergent Fit": ["High", "Moderate", "Moderate", "Low"],
+        "Execution Risk": ["Moderate", "Moderate", "High", "Very High"]
     })
 
     return data
 
 # =========================
-# RENDER VIEWS
+# RENDER VIEWS (11 Pages)
 # =========================
 def render_overview(data, mult_factor):
-    page_header("Executive Overview", "A curated view of IVIG market size, growth direction, and structural dynamics.")
+    page_header("Executive Overview", "A curated view of global IVIG market size, growth direction, and structural dynamics.")
     
     c1, c2, c3, c4 = st.columns(4)
     with c1: card_metric("2025 Market Revenue", fmt_mn(13090.5), "Baseline revenue actuals.")
@@ -379,29 +426,80 @@ def render_overview(data, mult_factor):
     with col2:
         section_open("Value Chain Margin Capture", "EBITDA profile across the ecosystem.")
         df_v = data["value_chain"]
-        fig = px.bar(df_v, x="EBITDA Margin", y="Value Chain Layer", orientation="h", color="EBITDA Margin", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
+        fig = px.bar(df_v, x="EBITDA Margin (%)", y="Value Chain Layer", orientation="h", color="EBITDA Margin (%)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
         fig.update_layout(coloraxis_showscale=False, xaxis_title="EBITDA Margin (%)", yaxis_title="")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
     page_footer()
 
-def render_dynamics(data, mult_factor):
-    page_header("Market Dynamics & Supply", "The fundamental reality of plasma economics and price realization.")
+def render_epidemiology(data):
+    page_header("Epidemiology & Patient Funnel", "Addressable boundaries defined by treatment failure, willingness to adopt, and medical eligibility.")
+    
+    df_funnel = data["funnel"]
     
     col1, col2 = st.columns([1, 1])
     with col1:
-        section_open("Average Realized ASP Scaling", "Price per Gram scaling acts as the clearing mechanism.")
-        df_p = pd.DataFrame({"Year": ["2025", "2030", "2035"], "ASP ($/g)": [43.8, 48.6, 52.4 * mult_factor]})
-        fig = px.line(df_p, x="Year", y="ASP ($/g)", markers=True, color_discrete_sequence=[BURGUNDY])
+        section_open("Patient Funnel Attrition (US Modeled)", "Drop-off from theoretical cases to IVIG-penetrated base.")
+        # Melt for grouped bar chart
+        df_melt = df_funnel.melt(id_vars=["Indication"], value_vars=["Diagnosed (%)", "Treated (%)", "Eligible (%)", "IVIG Penetration (%)"], var_name="Funnel Stage", value_name="Percentage")
+        fig = px.bar(df_melt, x="Indication", y="Percentage", color="Funnel Stage", barmode="group", color_discrete_sequence=[BURGUNDY_DARK, BURGUNDY_MID, GOLD, BURGUNDY_SOFT])
+        fig.update_layout(yaxis_title="Patient Capture (%)", xaxis_title="")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
-        section_open("Value Chain Economics", "Capital risk vs Margin reward.")
-        st.dataframe(data["value_chain"], use_container_width=True, hide_index=True)
+        section_open("Volumetric Consumption Index", "The 'Volume Sink' reality.")
+        fig = px.bar(df_funnel.sort_values("Annual Dose (g)"), x="Annual Dose (g)", y="Indication", orientation="h", color="Annual Dose (g)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
+        fig.update_layout(coloraxis_showscale=False, xaxis_title="Grams / Patient / Year", yaxis_title="")
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
+        section_close()
+        
+    st.markdown('<div class="insight-box"><strong>The Volume Sink Reality:</strong> CIDP is the ultimate volume sink of the industry, consuming 1,000 grams annually per patient. A single adult CIDP patient consumes the volumetric equivalent of nearly 28 pediatric Kawasaki patients.</div>', unsafe_allow_html=True)
+    page_footer()
+
+def render_soc(data):
+    page_header("Current SOC & Pricing Landscape", "Baseline economics establishing the pricing umbrella for targeted therapeutics.")
+    
+    df_soc = data["soc"]
+    
+    col1, col2 = st.columns([1.2, 1])
+    with col1:
+        section_open("Annual Cost Burden per Patient ($)", "Comparing standard psychiatric/neurological interventions vs IVIG.")
+        fig = px.bar(df_soc.sort_values("Annual Cost per Patient ($)"), x="Annual Cost per Patient ($)", y="Modality", orientation="h", color="Annual Cost per Patient ($)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
+        fig.update_layout(coloraxis_showscale=False, xaxis_title="Cost ($)", yaxis_title="")
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
+        section_close()
+        
+    with col2:
+        section_open("Treatment Mix Data", "Modality segmentation.")
+        st.dataframe(df_soc, use_container_width=True, hide_index=True)
+        section_close()
+        
+    st.markdown('<div class="insight-box"><strong>Economic Baseline:</strong> High-dose IVIG for conditions like CIDP establishes an extreme cost baseline ($50,000+ purely in drug costs). Payers are actively incentivizing step-throughs to targeted biologics to cap their volumetric financial exposure.</div>', unsafe_allow_html=True)
+    page_footer()
+
+def render_dynamics(data, mult_factor):
+    page_header("Market Dynamics & Supply Limits", "The fundamental reality of plasma economics and price realization.")
+    
+    col1, col2 = st.columns([1.5, 1])
+    with col1:
+        section_open("Supply vs Demand Gap", "Pre-erosion demand heavily outstrips available supply.")
+        df_m = data["market"].copy()
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Pre-Erosion Demand (Mn g)"], mode="lines", name="Pre-Erosion Demand (Mn g)", line=dict(color=BURGUNDY, width=3, dash='dash')))
+        fig.add_trace(go.Bar(x=df_m["Year"], y=df_m["Available Supply (Mn g)"], name="Available Supply (Mn g)", marker_color=GOLD, opacity=0.7))
+        fig.update_layout(yaxis=dict(title="Volume (Mn g)"), bargap=0.4)
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
+        section_close()
+        
+    with col2:
+        section_open("Average Realized ASP Scaling", "Price per Gram scaling acts as the clearing mechanism.")
+        df_p = pd.DataFrame({"Year": ["2025", "2030", "2035"], "ASP ($/g)": [43.8, 48.6, 52.4 * mult_factor]})
+        fig = px.line(df_p, x="Year", y="ASP ($/g)", markers=True, color_discrete_sequence=[BURGUNDY_DARK])
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
 
-    st.markdown('<div class="insight-box"><strong>The Plasma Ceiling:</strong> Realized pricing continues to aggressively climb because upstream plasma availability cannot meet raw epidemiological demand. Price acts as a restrictor.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="insight-box"><strong>The Plasma Ceiling:</strong> Realized pricing continues to aggressively climb because upstream plasma availability cannot meet raw epidemiological demand. If emerging therapies fail to displace IVIG in neurology, the supply chain will plunge back into catastrophic global shortages.</div>', unsafe_allow_html=True)
     page_footer()
 
 def render_indications(data, mult_factor):
@@ -422,7 +520,64 @@ def render_indications(data, mult_factor):
         st.dataframe(df_ind, use_container_width=True, hide_index=True)
         section_close()
         
-    st.markdown('<div class="insight-box"><strong>The Disruption Threat:</strong> A single CIDP patient consumes ~1,000 grams of IVIG annually. High adoption of FcRn blockers in CIDP and MG represents a massive volumetric threat to standard IVIG growth ceilings.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="insight-box"><strong>Strategic Divergence:</strong> Primary Immunodeficiency (PI) remains the ultimate defensive moat. Neurological applications are lucrative but highly vulnerable to FcRn displacement.</div>', unsafe_allow_html=True)
+    page_footer()
+
+def render_delivery_econ(data):
+    page_header("Delivery Innovation & Economics", "Care-model cost and capacity fundamentally divide scalable vs non-scalable modalities.")
+    
+    df_econ = data["economics"]
+    
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        section_open("Cost & Duration Compression", "Take-home models annihilate infrastructure drag.")
+        df_melt = df_econ.melt(id_vars=["Care Model Paradigm"], value_vars=["Duration Reduction (%)", "Cost Compression (%)"], var_name="Metric", value_name="Percentage")
+        fig = px.bar(df_melt, x="Care Model Paradigm", y="Percentage", color="Metric", barmode="group", color_discrete_sequence=[BURGUNDY, GOLD])
+        fig.update_layout(xaxis_title="", yaxis_title="Reduction (%)")
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
+        section_close()
+        
+    with col2:
+        section_open("Throughput Expansion Multiplier", "Theoretical patient volume scalability.")
+        fig = px.line(df_econ, x="Care Model Paradigm", y="Throughput Expansion", markers=True, color_discrete_sequence=[BURGUNDY_DARK])
+        fig.update_traces(line=dict(width=4), marker=dict(size=10))
+        fig.update_layout(xaxis_title="", yaxis_title="Throughput Multiplier (x)")
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
+        section_close()
+
+    st.markdown('<div class="insight-box"><strong>Delivery as a Moat:</strong> Transitioning from an all-day clinic model to a take-home model strips operating costs while expanding systemic capacity exponentially, entirely bypassing the physical real estate bottleneck.</div>', unsafe_allow_html=True)
+    page_footer()
+
+def render_pipeline(data):
+    page_header("Clinical Pipeline & FcRn Risk", "The rapid advancement of targeted therapies aggressively eroding IVIG reliance.")
+    
+    df_pipe = data["pipeline"]
+    
+    section_open("Late-Stage Targeted Therapeutics Threat", "Monoclonal antibodies and Complement inhibitors targeting the Autoimmune pool.")
+    st.dataframe(df_pipe, use_container_width=True, hide_index=True)
+    section_close()
+    
+    st.markdown('<div class="insight-box"><strong>Pipeline Threat:</strong> The proliferation of FcRn inhibitors (Vyvgart, Nipocalimab) guarantees that IVIG will lose its monopoly in high-volume autoimmune neurology. Treatment-naïve patients are increasingly being routed directly to novel biologics, starving IVIG of new patient starts.</div>', unsafe_allow_html=True)
+    page_footer()
+
+def render_value_chain(data):
+    page_header("Value Chain & Profit Pools", "Where revenue is captured and margin is maximized across the ecosystem.")
+    
+    df_vc = data["value_chain"]
+    
+    col1, col2 = st.columns([1, 1.2])
+    with col1:
+        section_open("Gross Revenue Split", "Top-line distribution.")
+        fig = px.pie(df_vc, values="Revenue Split (%)", names="Value Chain Layer", hole=0.5, color_discrete_sequence=[BURGUNDY, GOLD, BURGUNDY_MID, BURGUNDY_SOFT])
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
+        section_close()
+        
+    with col2:
+        section_open("EBITDA & Capital Risk Profiling", "Margin vs Moat.")
+        st.dataframe(df_vc, use_container_width=True, hide_index=True)
+        section_close()
+        
+    st.markdown('<div class="insight-box"><strong>Value Migration:</strong> Fractionation commands the highest EBITDA margin (28%) due to virtually insurmountable barriers to entry. However, Formulation/Fill-Finish offers highly attractive margins (20%) with substantially lower raw capital risk, representing an optimal strategic insertion point.</div>', unsafe_allow_html=True)
     page_footer()
 
 def render_regions(data, mult_factor):
@@ -462,7 +617,7 @@ def render_competition(data):
     col1, col2 = st.columns([1, 1.2])
     with col1:
         section_open("Market Concentration", "Aggregated Share by Tier.")
-        fig = px.pie(df_comp, values="Share (%)", names="Market Tier", hole=0.6, color_discrete_sequence=[BURGUNDY, BURGUNDY_MID, GOLD])
+        fig = px.pie(df_comp, values="Market Share (%)", names="Market Tier", hole=0.6, color_discrete_sequence=[BURGUNDY, BURGUNDY_MID, GOLD])
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
 
@@ -475,7 +630,7 @@ def render_competition(data):
     page_footer()
 
 def render_emergent(data, mult_factor):
-    page_header("Emergent BioSolutions Strategy", "Analyzing optimal entry vectors, bypassing direct IVIG competition.")
+    page_header("Emergent Strategy Matrix", "Analyzing optimal entry vectors, bypassing direct IVIG competition.")
     
     df_em = data["emergent"].copy()
     df_em["2035 Rev Potential ($Mn)"] = df_em["2035 Rev Potential ($Mn)"] * mult_factor
@@ -488,7 +643,7 @@ def render_emergent(data, mult_factor):
     col1, col2 = st.columns([1.5, 1])
     with col1:
         section_open("Strategic Pathway Economics", "Evaluating 2035 Revenue Potential vs Risk.")
-        fig = px.bar(df_em, x="Strategic Pathway", y="2035 Rev Potential ($Mn)", color="Execution Risk", color_discrete_map={"Moderate": GOLD, "Very High": BURGUNDY_DARK})
+        fig = px.bar(df_em, x="Strategic Pathway", y="2035 Rev Potential ($Mn)", color="Execution Risk", color_discrete_map={"Moderate": GOLD, "High": BURGUNDY_MID, "Very High": BURGUNDY_DARK})
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
@@ -546,7 +701,9 @@ def check_access():
             st.rerun()
 
     if not st.session_state.authenticated:
-        st.markdown("""<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:60vh;"><h2 style='color:var(--burgundy); font-weight:800; font-size:2.4rem;'>Dashboard Secured</h2><p style='color:var(--muted); font-size:1.1rem;'>Please use the sidebar to authenticate and load the market view.</p></div>""", unsafe_allow_html=True)
+        if LOGO_B64:
+            st.markdown(f'<div style="text-align:center; margin-top:10vh;"><img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:60px; margin-bottom:20px;" /></div>', unsafe_allow_html=True)
+        st.markdown("""<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:30vh;"><h2 style='color:var(--burgundy); font-weight:800; font-size:2.4rem;'>Dashboard Secured</h2><p style='color:var(--muted); font-size:1.1rem;'>Please use the sidebar to authenticate and load the market view.</p></div>""", unsafe_allow_html=True)
         st.stop()
     return True
 
@@ -573,8 +730,12 @@ page = st.sidebar.radio(
     "",
     [
         "Executive Overview",
+        "Epidemiology & Patient Funnel",
+        "Current SOC & Pricing Landscape",
         "Market Dynamics & Supply",
         "Indication & Disruption Risk",
+        "Delivery Innovation & Economics",
+        "Value Chain & Profit Pools",
         "Regional Analysis",
         "Competitive Landscape",
         "Emergent Strategy",
@@ -589,8 +750,12 @@ if st.sidebar.button("End Session", use_container_width=True):
 
 # Router
 if page == "Executive Overview": render_overview(data, engine_multiplier)
+elif page == "Epidemiology & Patient Funnel": render_epidemiology(data)
+elif page == "Current SOC & Pricing Landscape": render_soc(data)
 elif page == "Market Dynamics & Supply": render_dynamics(data, engine_multiplier)
 elif page == "Indication & Disruption Risk": render_indications(data, engine_multiplier)
+elif page == "Delivery Innovation & Economics": render_delivery_econ(data)
+elif page == "Value Chain & Profit Pools": render_value_chain(data)
 elif page == "Regional Analysis": render_regions(data, engine_multiplier)
 elif page == "Competitive Landscape": render_competition(data)
 elif page == "Emergent Strategy": render_emergent(data, engine_multiplier)
