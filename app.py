@@ -24,7 +24,7 @@ st.set_page_config(
 # =========================
 # THEME COLORS & LOGO LOGIC
 # =========================
-BURGUNDY = "#4A0C25" # Deepened for a more premium look
+BURGUNDY = "#4A0C25" 
 BURGUNDY_DARK = "#2D0716"
 BURGUNDY_MID = "#7A143D"
 BURGUNDY_SOFT = "#A83F68"
@@ -35,8 +35,7 @@ MUTED = "#6B7280"
 BORDER = "#E5E7EB"
 
 PREVIEW_NOTE = (
-    "This deliverable is for strategic review. Competitor identities and specific "
-    "market share revenues have been intentionally abstracted into Tiers."
+    "Confidential Strategic Advisory Deliverable. Prepared specifically for Emergent BioSolutions."
 )
 
 @st.cache_data
@@ -127,18 +126,18 @@ st.markdown(
         border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.2) !important;
         padding: 12px 14px !important; background: rgba(255,255,255,0.05) !important; color: white !important;
     }}
-    .stTextInput input:focus {{ border-color: {GOLD} !important; box-shadow: 0 0 0 2px rgba(196,154,35,0.3) !important; }}
+    .stTextInput input:focus {{ border-color: {GOLD} !important; box-shadow: 0 0 0 3px rgba(196,154,35,0.3) !important; }}
 
     /* APP-LIKE NAVIGATION */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {{
-        padding: 10px 14px !important; margin-bottom: 4px !important; border-radius: 8px !important;
+        padding: 8px 12px !important; margin-bottom: 2px !important; border-radius: 8px !important;
         transition: all 0.2s ease !important; cursor: pointer !important;
     }}
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {{ background: rgba(255,255,255,0.05) !important; transform: translateX(3px) !important; }}
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:has(input[checked]) {{
          background: rgba(255,255,255,0.1) !important; border-left: 4px solid {GOLD} !important;
     }}
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] p {{ font-weight: 600 !important; font-size: 0.92rem !important; color: white !important; }}
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] p {{ font-weight: 600 !important; font-size: 0.88rem !important; color: white !important; }}
 
     /* BRANDING HEADERS */
     .smr-brand {{
@@ -156,7 +155,7 @@ st.markdown(
       content: ''; position: absolute; top: -50%; right: -10%; width: 60%; height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%); transform: rotate(-45deg);
     }}
-    .hero h2 {{ margin: 0; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; position: relative; z-index: 2; line-height: 1.2; }}
+    .hero h2 {{ margin: 0; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; position: relative; z-index: 2; line-height: 1.2; }}
     .hero p {{ position: relative; z-index: 2; margin-top: 12px; font-size: 1.05rem; opacity: 0.9; }}
     
     /* GLASSMORPHISM DATA CARDS */
@@ -255,7 +254,7 @@ def log_access(name: str, email: str):
     except Exception: pass
 
 # =========================
-# DATA ENGINE (Definitive Base Case)
+# DATA ENGINE (Fully Fixed & Expanded)
 # =========================
 @st.cache_data(show_spinner=False)
 def load_data():
@@ -279,10 +278,10 @@ def load_data():
         "Disruption Risk": ["Low", "High", "Critical", "Moderate", "Low"]
     })
     
-    # 3. Patient Funnel (Epidemiology)
+    # 3. Patient Funnel
     data["funnel"] = pd.DataFrame({
         "Stage": ["Total Diagnosed", "Medically Treated", "IVIG Eligible", "Actual IVIG Penetration"],
-        "Patients": [54560, 46921, 43167, 28058] # Example cascade for PI
+        "Patients": [54560, 46921, 43167, 28058] 
     })
     
     # 4. Standard of Care Cost
@@ -298,7 +297,12 @@ def load_data():
         "EBITDA Margin (%)": [16.0, 28.0, 20.0, 18.0]
     })
 
-    # 6. Delivery Economics (Waterfall)
+    # 6. Delivery Economics (FIXED KeyError)
+    data["economics"] = pd.DataFrame({
+        "Care Model Paradigm": ["All-Day Clinic", "Half-Day Clinic", "Short Clinic", "Take-Home Low-Dose"],
+        "Throughput Expansion": [1.0, 2.5, 5.0, 10.0]
+    })
+    
     data["waterfall"] = pd.DataFrame({
         "Measure": ["absolute", "relative", "relative", "relative", "total"],
         "Label": ["All-Day Clinic", "Half-Day Savings", "Short Clinic Savings", "Take-Home Savings", "Take-Home Model"],
@@ -320,19 +324,45 @@ def load_data():
         "Map Proxy": ["USA", "CHN", "DEU", "BRA", "ZAF"]
     })
 
-    # 9. Competitors
-    data["competitors"] = pd.DataFrame({
-        "Market Tier": ["Tier 1 Leaders (Top 2)", "Tier 2 Majors (Next 2)", "Mid-Tier Challengers"],
-        "Market Share (%)": [47.0, 33.0, 20.0]
+    # 9. Core Competitors
+    data["competitors_core"] = pd.DataFrame({
+        "Company": ["CSL Behring", "Grifols", "Takeda", "Octapharma", "Kedrion / Biotest", "Others"],
+        "2025 Share (%)": [25.0, 22.0, 19.0, 14.0, 7.0, 13.0],
+        "2035 Share (%)": [24.0, 21.0, 18.0, 14.5, 7.8, 14.7],
+        "Strategic Moat": ["Massive Plasma Network", "400+ Global Centers", "Broad IG Franchise", "Largest Private Fractionator", "Expanding US Investment", "Niche Applications"]
     })
 
-    # 10. Emergent Strategy Matrix (Bubble Data)
-    data["emergent"] = pd.DataFrame({
+    # 10. Direct Competitors (Emergent Specific)
+    data["competitors_direct"] = pd.DataFrame({
+        "Competitor": ["Kedrion", "Kamada", "Bavarian Nordic", "Catalent", "ADMA Biologics"],
+        "Primary Overlap": ["Specialty plasma / Hyperimmune", "Hyperimmune niches", "Biodefense / Orthopox", "CDMO / Aseptic Fill-Finish", "Niche specialty immunoglobulins"],
+        "Relevant Assets": ["KEDRAB, QIVIGY", "KAMRAB, VARIZIG", "JYNNEOS", "End-to-end Biologics CDMO", "BIVIGAM, ASCENIV"],
+        "Threat Level": ["High", "High", "High", "Medium-High", "Medium"]
+    })
+
+    # 11. Emergent Assets
+    data["emergent_assets"] = pd.DataFrame({
+        "Asset": ["ANTHRASIL", "CNJ-016 / VIGIV", "Raxibacumab"],
+        "Type": ["Polyclonal IVIG", "Vaccinia IVIG", "Monoclonal Antibody"],
+        "Disease / Setting": ["Inhalational Anthrax", "Severe Vaccinia Complications", "Anthrax Biodefense"],
+        "Role in Pathway": ["Adjunctive toxin-neutralizing", "Rescue therapy", "Antitoxin biologic"]
+    })
+
+    # 12. Disease Relevance Map
+    data["disease_map"] = pd.DataFrame({
+        "Disease": ["Primary Immunodeficiency (PI)", "CIDP", "Myasthenia Gravis (gMG)", "ITP", "Kawasaki Disease", "Inhalational Anthrax / Vaccinia"],
+        "IVIG Role": ["Core Foundational", "1st Line / Maintenance", "Rescue / Crisis Bridge", "Rescue Bridging", "Standard Acute", "Highly Specialized Countermeasure"],
+        "Threat / Volume Profile": ["Largest durable pool", "High FcRn Disruption", "Critical FcRn Disruption", "Episodic volume", "Acute pediatric", "Low volume, high stockpile value"]
+    })
+
+    # 13. Emergent Strategy Matrix (FIXED KeyError)
+    data["emergent_strategy"] = pd.DataFrame({
         "Strategic Pathway": ["Adjacency (Hyper/MCM)", "CDMO / Fill-Finish", "Partnered Specialty Ig", "Direct Pooled-IVIG"],
         "Execution Risk Score": [2, 2, 3, 4], # 1=Low, 4=Very High
         "Execution Risk": ["Moderate", "Moderate", "High", "Very High"],
         "2030 TAM ($Mn)": [3308.0, 1963.6, 4282.3, 20244.6],
         "2035 Rev Potential ($Mn)": [232.8, 99.1, 41.3, 34.4],
+        "EBITDA Target": ["28.0%", "22.0%", "18.0%", "14.0%"]
     })
 
     return data
@@ -380,12 +410,11 @@ def render_epidemiology(data):
     col1, col2 = st.columns([1, 1])
     with col1:
         section_open("Patient Funnel Attrition (Primary Immunodeficiency Model)", "Severe drop-off to actual IVIG-penetrated base.")
-        # CONSULTING UPGRADE: Funnel Chart
         fig = go.Figure(go.Funnel(
             y=df_funnel["Stage"],
             x=df_funnel["Patients"],
             textinfo="value+percent initial",
-            marker=dict(color=[BURGUNDY, BURGUNDY_MID, BURGUNDY_SOFT, GOLD])
+            marker=dict(color=[BURGUNDY_DARK, BURGUNDY, BURGUNDY_SOFT, GOLD])
         ))
         fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
@@ -431,7 +460,6 @@ def render_dynamics(data):
         section_open("Supply vs Demand Gap", "Pre-erosion demand heavily outstrips available supply.")
         df_m = data["market"]
         fig = go.Figure()
-        # Fill between demand and supply to show the gap visually
         fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Available Supply (Mn g)"], mode="lines", name="Available Supply", line=dict(color=GOLD, width=2)))
         fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Pre-Erosion Demand (Mn g)"], mode="lines", name="Unconstrained Demand", fill='tonexty', fillcolor='rgba(91,15,46,0.1)', line=dict(color=BURGUNDY, width=3, dash='dash')))
         fig.update_layout(yaxis=dict(title="Volume (Mn g)"), hovermode="x unified")
@@ -457,7 +485,6 @@ def render_indications(data):
     col1, col2 = st.columns([1.2, 1])
     with col1:
         section_open("Indication Risk Matrix (2035)", "Sizing the market by disruption vulnerability.")
-        # CONSULTING UPGRADE: Treemap
         fig = px.treemap(df_ind, path=['Disruption Risk', 'Indication'], values='2035 Rev ($Mn)', color='Disruption Risk',
                          color_discrete_map={"Critical": BURGUNDY_DARK, "High": BURGUNDY, "Moderate": BURGUNDY_SOFT, "Low": GOLD})
         fig.update_layout(margin=dict(t=20, l=10, r=10, b=10))
@@ -476,11 +503,11 @@ def render_delivery_econ(data):
     page_header("Delivery Innovation & Economics", "Care-model cost and capacity fundamentally divide scalable vs non-scalable modalities.")
     
     df_waterfall = data["waterfall"]
+    df_econ = data["economics"]
     
     col1, col2 = st.columns([1.2, 1])
     with col1:
         section_open("Care Model Cost Compression", "Step-down economic impact of delivery innovation.")
-        # CONSULTING UPGRADE: Waterfall Chart
         fig = go.Figure(go.Waterfall(
             orientation="v",
             measure=df_waterfall["Measure"],
@@ -497,7 +524,6 @@ def render_delivery_econ(data):
         
     with col2:
         section_open("Throughput Expansion Multiplier", "Theoretical patient volume scalability.")
-        df_econ = data["economics"]
         fig = px.line(df_econ, x="Care Model Paradigm", y="Throughput Expansion", markers=True, color_discrete_sequence=[BURGUNDY])
         fig.update_traces(line=dict(width=4), marker=dict(size=10))
         fig.update_layout(xaxis_title="", yaxis_title="Throughput Multiplier (x)")
@@ -513,7 +539,6 @@ def render_pipeline(data):
     df_pipe = data["pipeline"]
     
     section_open("Late-Stage Targeted Therapeutics Threat", "Monoclonal antibodies and Complement inhibitors targeting the Autoimmune pool.")
-    # Styled dataframe for premium look
     st.dataframe(df_pipe, use_container_width=True, hide_index=True)
     section_close()
     
@@ -571,39 +596,61 @@ def render_regions(data):
     page_footer()
 
 def render_competition(data):
-    page_header("Competitive Landscape", "Preview of market control. Player identities and exact revenues have been securely masked.")
+    page_header("Competitive Landscape", "The IVIG ecosystem is fundamentally bifurcated into the Core Plasma Oligopoly and the Nimble Adjacency Players.")
 
-    df_comp = data["competitors"]
+    df_core = data["competitors_core"]
+    df_direct = data["competitors_direct"]
+
+    st.markdown('<div class="insight-box"><strong>Strategic Imperative:</strong> Emergent BioSolutions is not structured to fight in Layer 1 (The Core Oligopoly). The true competitive battlefield for Emergent lies in Layer 2 (Direct Comparators in Hyperimmunes, Biodefense, and CDMO).</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 1.2])
     with col1:
-        section_open("Market Concentration", "Aggregated Share by Tier.")
-        fig = px.pie(df_comp, values="Market Share (%)", names="Market Tier", hole=0.6, color_discrete_sequence=[BURGUNDY_DARK, BURGUNDY_MID, GOLD])
+        section_open("Layer 1: The Core Oligopoly", "Market share closely mirrors plasma collection ownership.")
+        fig = px.pie(df_core, values="2035 Share (%)", names="Company", hole=0.6, color_discrete_sequence=[BURGUNDY_DARK, BURGUNDY_MID, GOLD, BURGUNDY_SOFT, "#E1D2DA", "#C6A6B6"])
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
 
     with col2:
-        section_open("Structural Moats by Tier", "Why direct entry is restricted.")
-        st.dataframe(df_comp, use_container_width=True, hide_index=True)
+        section_open("Layer 1: Structural Moats", "Why direct entry into pooled-IVIG is restricted.")
+        st.dataframe(df_core[["Company", "2035 Share (%)", "Strategic Moat"]], use_container_width=True, hide_index=True)
         section_close()
 
-    st.markdown('<div class="insight-box"><strong>Strategic Lockout:</strong> The Top 4 entities effectively barricade the core pooled-IVIG space against non-integrated entrants due to upstream plasma collection ownership.</div>', unsafe_allow_html=True)
+    section_open("Layer 2: Emergent's Direct Comparators", "Entities overlapping with targeted immunoglobulins, stockpiles, and manufacturing.")
+    st.dataframe(df_direct, use_container_width=True, hide_index=True)
+    section_close()
+
     page_footer()
 
-def render_emergent(data):
+def render_emergent_assets(data):
+    page_header("Emergent Asset Map & Clinical Fit", "Mapping Emergent's portfolio against the reality of immunoglobulin treatment algorithms.")
+    
+    df_assets = data["emergent_assets"]
+    df_map = data["disease_map"]
+
+    section_open("Emergent's Key Positioned Assets", "Highly specialized assets isolated from chronic retail pressure.")
+    st.dataframe(df_assets, use_container_width=True, hide_index=True)
+    section_close()
+
+    section_open("Disease Relevance & Substitution Risk Matrix", "Why the core IVIG pools are the wrong target.")
+    st.dataframe(df_map, use_container_width=True, hide_index=True)
+    section_close()
+
+    st.markdown('<div class="insight-box"><strong>The Asset Reality:</strong> Emergent’s asset map does not overlap with the largest chronic IVIG replacement markets. Instead, it overlaps with specialized immune-globulin use cases where clinical urgency, public-health preparedness, and stockpile logic matter more than home infusion share or neurologist prescribing.</div>', unsafe_allow_html=True)
+    page_footer()
+
+def render_emergent_strategy(data):
     page_header("Emergent Strategy Matrix", "Analyzing optimal entry vectors, bypassing direct IVIG competition.")
     
-    df_em = data["emergent"]
+    df_em = data["emergent_strategy"]
 
     c1, c2, c3 = st.columns(3)
-    with c1: card_metric("Best Margin Profile", "Hyperimmunes", "28% EBITDA Target.")
+    with c1: card_metric("Best Margin Profile", "Adjacencies", "Hyperimmunes & Biodefense.")
     with c2: card_metric("Secondary Pathway", "CDMO Fill-Finish", "Monetizes footprint without plasma risk.")
     with c3: card_metric("Path to Avoid", "Direct IVIG", "Requires $1B+ in CAPEX.")
 
     col1, col2 = st.columns([1.5, 1])
     with col1:
         section_open("Strategic Pathway Matrix", "Plotting Execution Risk vs Revenue Potential.")
-        # CONSULTING UPGRADE: Bubble Chart
         fig = px.scatter(df_em, x="Execution Risk Score", y="2035 Rev Potential ($Mn)", size="2030 TAM ($Mn)", color="Strategic Pathway", 
                          color_discrete_sequence=[BURGUNDY, GOLD, BURGUNDY_MID, BURGUNDY_DARK], hover_name="Strategic Pathway", size_max=50)
         fig.update_xaxes(tickvals=[1, 2, 3, 4], ticktext=["Low", "Moderate", "High", "Very High"], title="Execution Risk")
@@ -615,7 +662,7 @@ def render_emergent(data):
         st.dataframe(df_em[["Strategic Pathway", "2035 Rev Potential ($Mn)", "EBITDA Target"]], use_container_width=True, hide_index=True)
         section_close()
 
-    st.markdown('<div class="insight-box"><strong>Recommendation: Double-Down on Adjacencies.</strong> Emergent must fiercely avoid direct competition with integrated plasma leaders. Instead, dominate the high-margin Serviceable Available Market spanning hyperimmune products and CDMO processing.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="insight-box"><strong>Final Recommendation: Double-Down on Adjacencies.</strong> Emergent must fiercely avoid direct competition with integrated plasma leaders like CSL and Grifols. Instead, dominate the high-margin Serviceable Available Market spanning targeted hyperimmune products, government MCM procurement, and CDMO processing.</div>', unsafe_allow_html=True)
     page_footer()
 
 def render_methodology(data):
@@ -697,6 +744,7 @@ page = st.sidebar.radio(
         "Value Chain & Profit Pools",
         "Regional Analysis",
         "Competitive Landscape",
+        "Emergent Asset Map & Fit",
         "Emergent Strategy",
         "Methodology & Coverage"
     ],
@@ -718,5 +766,6 @@ elif page == "Clinical Pipeline & FcRn Risk": render_pipeline(data)
 elif page == "Value Chain & Profit Pools": render_value_chain(data)
 elif page == "Regional Analysis": render_regions(data)
 elif page == "Competitive Landscape": render_competition(data)
-elif page == "Emergent Strategy": render_emergent(data)
+elif page == "Emergent Asset Map & Fit": render_emergent_assets(data)
+elif page == "Emergent Strategy": render_emergent_strategy(data)
 elif page == "Methodology & Coverage": render_methodology(data)
