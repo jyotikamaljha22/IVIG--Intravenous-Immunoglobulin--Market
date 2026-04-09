@@ -9,6 +9,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 # =========================
 # PAGE CONFIG
@@ -17,7 +18,7 @@ st.set_page_config(
     page_title="Strategic Market Research | IVIG & Emergent",
     page_icon="📈",
     layout="wide",
-    initial_sidebar_state="collapsed", # Disables native sidebar permanently
+    initial_sidebar_state="expanded", # CRITICAL FIX: Ensures sidebar is open
 )
 
 # =========================
@@ -71,6 +72,38 @@ st.markdown(
     .viewerBadge_container, #viewerBadge_container {{ display: none !important; }}
     footer {{ display: none !important; }}
     header[data-testid="stHeader"] {{ background: transparent !important; box-shadow: none !important; }}
+
+    /* --- CRITICAL FIX: PERMANENT SIDEBAR LOCK & JAILBREAK UI --- */
+    /* Hide the collapse button (<) inside the sidebar so it can NEVER be closed */
+    [data-testid="stSidebarCollapseButton"] {{ 
+        display: none !important; 
+        width: 0 !important; 
+    }}
+    
+    /* Make the open button highly visible just in case the JS fails */
+    [data-testid="collapsedControl"], [data-testid="stSidebarCollapsedControl"] {{
+        display: flex !important;
+        visibility: visible !important;
+        position: fixed !important;
+        top: 15px !important;
+        left: 15px !important;
+        z-index: 999999 !important;
+        background: {BURGUNDY} !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 14px rgba(91,15,46,0.3) !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.4rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }}
+    [data-testid="collapsedControl"] svg, [data-testid="stSidebarCollapsedControl"] svg {{
+        fill: white !important;
+        color: white !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }}
 
     /* CUSTOM ELEGANT SCROLLBAR */
     ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
@@ -240,6 +273,22 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True,
+)
+
+# --- JAILBREAK SCRIPT ---
+# This forces the sidebar open immediately if the browser tries to hide it
+components.html(
+    """
+    <script>
+    setTimeout(function() {
+        var expandBtn = window.parent.document.querySelector('[data-testid="collapsedControl"]');
+        if (expandBtn) {
+            expandBtn.click();
+        }
+    }, 100);
+    </script>
+    """,
+    height=0, width=0
 )
 
 # =========================
@@ -440,7 +489,6 @@ def render_epidemiology(data):
     col1, col2 = st.columns([1, 1])
     with col1:
         section_open("Patient Funnel Attrition (US Modeled)", "Drop-off from theoretical cases to IVIG-penetrated base.")
-        # Melt for grouped bar chart
         df_melt = df_funnel.melt(id_vars=["Indication"], value_vars=["Diagnosed (%)", "Treated (%)", "Eligible (%)", "IVIG Penetration (%)"], var_name="Funnel Stage", value_name="Percentage")
         fig = px.bar(df_melt, x="Indication", y="Percentage", color="Funnel Stage", barmode="group", color_discrete_sequence=[BURGUNDY_DARK, BURGUNDY_MID, GOLD, BURGUNDY_SOFT])
         fig.update_layout(yaxis_title="Patient Capture (%)", xaxis_title="")
@@ -735,6 +783,7 @@ page = st.sidebar.radio(
         "Market Dynamics & Supply",
         "Indication & Disruption Risk",
         "Delivery Innovation & Economics",
+        "Clinical Pipeline & FcRn Risk",
         "Value Chain & Profit Pools",
         "Regional Analysis",
         "Competitive Landscape",
@@ -755,6 +804,7 @@ elif page == "Current SOC & Pricing Landscape": render_soc(data)
 elif page == "Market Dynamics & Supply": render_dynamics(data, engine_multiplier)
 elif page == "Indication & Disruption Risk": render_indications(data, engine_multiplier)
 elif page == "Delivery Innovation & Economics": render_delivery_econ(data)
+elif page == "Clinical Pipeline & FcRn Risk": render_pipeline(data)
 elif page == "Value Chain & Profit Pools": render_value_chain(data)
 elif page == "Regional Analysis": render_regions(data, engine_multiplier)
 elif page == "Competitive Landscape": render_competition(data)
