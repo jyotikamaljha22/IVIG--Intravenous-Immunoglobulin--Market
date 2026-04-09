@@ -35,7 +35,8 @@ MUTED = "#6B7280"
 BORDER = "#E5E7EB"
 
 PREVIEW_NOTE = (
-    "Confidential Strategic Advisory Deliverable. Prepared specifically for Emergent BioSolutions."
+    "This deliverable is for strategic review. Competitor identities and specific "
+    "market share revenues have been intentionally abstracted into Tiers."
 )
 
 @st.cache_data
@@ -107,37 +108,53 @@ st.markdown(
         border-right: 1px solid rgba(255,255,255,0.05) !important;
     }}
     [data-testid="stSidebar"] p, [data-testid="stSidebar"] div, [data-testid="stSidebar"] label {{
-        color: rgba(255,255,255,0.85) !important;
+        color: rgba(255,255,255,0.9) !important;
     }}
 
-    /* SLEEK BUTTON STYLING */
-    .stButton > button {{
+    /* --- CRITICAL FIX: INPUT FIELDS & TEXT COLOR --- */
+    div[data-baseweb="input"] {{
+        background-color: #ffffff !important;
+        border-radius: 8px !important;
+    }}
+    .stTextInput input {{
+        border-radius: 8px !important; 
+        border: 1px solid rgba(91,15,46,0.3) !important;
+        padding: 12px 14px !important; 
+        background-color: #ffffff !important; 
+        color: #1A1A1A !important;
+        -webkit-text-fill-color: #1A1A1A !important;
+        transition: all 0.2s ease !important;
+    }}
+    .stTextInput input:focus {{ 
+        border-color: {GOLD} !important; 
+        box-shadow: 0 0 0 2px rgba(196,154,35,0.4) !important; 
+    }}
+
+    /* --- CRITICAL FIX: BUTTON STYLING (Including Form Submit) --- */
+    .stButton > button, [data-testid="baseButton-secondary"], [data-testid="baseButton-primary"] {{
         background: linear-gradient(135deg, {GOLD} 0%, #A37F1C 100%) !important;
         color: {BURGUNDY_DARK} !important;
         border: none !important; border-radius: 8px !important;
-        padding: 10px 24px !important; font-weight: 800 !important; font-size: 0.9rem !important;
+        padding: 10px 24px !important; font-weight: 800 !important; font-size: 0.95rem !important;
         letter-spacing: 0.02em; transition: all 0.2s ease !important;
-        box-shadow: 0 4px 12px rgba(196,154,35,0.3) !important;
+        box-shadow: 0 4px 12px rgba(196,154,35,0.4) !important;
+        opacity: 1 !important;
     }}
-    .stButton > button:hover {{ transform: translateY(-2px) !important; box-shadow: 0 6px 16px rgba(196,154,35,0.45) !important; }}
-
-    /* INPUT FIELDS */
-    .stTextInput input {{
-        border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.2) !important;
-        padding: 12px 14px !important; background: rgba(255,255,255,0.05) !important; color: white !important;
+    .stButton > button:hover, [data-testid="baseButton-secondary"]:hover {{ 
+        transform: translateY(-2px) !important; 
+        box-shadow: 0 6px 16px rgba(196,154,35,0.6) !important; 
     }}
-    .stTextInput input:focus {{ border-color: {GOLD} !important; box-shadow: 0 0 0 3px rgba(196,154,35,0.3) !important; }}
 
     /* APP-LIKE NAVIGATION */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {{
-        padding: 8px 12px !important; margin-bottom: 2px !important; border-radius: 8px !important;
+        padding: 10px 14px !important; margin-bottom: 4px !important; border-radius: 8px !important;
         transition: all 0.2s ease !important; cursor: pointer !important;
     }}
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {{ background: rgba(255,255,255,0.05) !important; transform: translateX(3px) !important; }}
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:has(input[checked]) {{
          background: rgba(255,255,255,0.1) !important; border-left: 4px solid {GOLD} !important;
     }}
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] p {{ font-weight: 600 !important; font-size: 0.88rem !important; color: white !important; }}
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] p {{ font-weight: 600 !important; font-size: 0.92rem !important; color: white !important; }}
 
     /* BRANDING HEADERS */
     .smr-brand {{
@@ -155,7 +172,7 @@ st.markdown(
       content: ''; position: absolute; top: -50%; right: -10%; width: 60%; height: 200%;
       background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%); transform: rotate(-45deg);
     }}
-    .hero h2 {{ margin: 0; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; position: relative; z-index: 2; line-height: 1.2; }}
+    .hero h2 {{ margin: 0; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; position: relative; z-index: 2; line-height: 1.2; }}
     .hero p {{ position: relative; z-index: 2; margin-top: 12px; font-size: 1.05rem; opacity: 0.9; }}
     
     /* GLASSMORPHISM DATA CARDS */
@@ -254,7 +271,7 @@ def log_access(name: str, email: str):
     except Exception: pass
 
 # =========================
-# DATA ENGINE (Fully Fixed & Expanded)
+# DATA ENGINE 
 # =========================
 @st.cache_data(show_spinner=False)
 def load_data():
@@ -297,16 +314,16 @@ def load_data():
         "EBITDA Margin (%)": [16.0, 28.0, 20.0, 18.0]
     })
 
-    # 6. Delivery Economics (FIXED KeyError)
-    data["economics"] = pd.DataFrame({
-        "Care Model Paradigm": ["All-Day Clinic", "Half-Day Clinic", "Short Clinic", "Take-Home Low-Dose"],
-        "Throughput Expansion": [1.0, 2.5, 5.0, 10.0]
-    })
-    
+    # 6. Delivery Economics
     data["waterfall"] = pd.DataFrame({
         "Measure": ["absolute", "relative", "relative", "relative", "total"],
         "Label": ["All-Day Clinic", "Half-Day Savings", "Short Clinic Savings", "Take-Home Savings", "Take-Home Model"],
         "Value": [1635, -780, -435, -115, 305]
+    })
+    
+    data["economics"] = pd.DataFrame({
+        "Care Model Paradigm": ["All-Day Clinic", "Half-Day Clinic", "Short Clinic", "Take-Home Low-Dose"],
+        "Throughput Expansion": [1.0, 2.5, 5.0, 10.0]
     })
     
     # 7. Clinical Pipeline
@@ -324,15 +341,13 @@ def load_data():
         "Map Proxy": ["USA", "CHN", "DEU", "BRA", "ZAF"]
     })
 
-    # 9. Core Competitors
+    # 9. Competitors
     data["competitors_core"] = pd.DataFrame({
-        "Company": ["CSL Behring", "Grifols", "Takeda", "Octapharma", "Kedrion / Biotest", "Others"],
-        "2025 Share (%)": [25.0, 22.0, 19.0, 14.0, 7.0, 13.0],
+        "Company": ["Company 1", "Company 2", "Company 3", "Company 4", "Company 5", "Others"],
         "2035 Share (%)": [24.0, 21.0, 18.0, 14.5, 7.8, 14.7],
         "Strategic Moat": ["Massive Plasma Network", "400+ Global Centers", "Broad IG Franchise", "Largest Private Fractionator", "Expanding US Investment", "Niche Applications"]
     })
 
-    # 10. Direct Competitors (Emergent Specific)
     data["competitors_direct"] = pd.DataFrame({
         "Competitor": ["Kedrion", "Kamada", "Bavarian Nordic", "Catalent", "ADMA Biologics"],
         "Primary Overlap": ["Specialty plasma / Hyperimmune", "Hyperimmune niches", "Biodefense / Orthopox", "CDMO / Aseptic Fill-Finish", "Niche specialty immunoglobulins"],
@@ -340,7 +355,7 @@ def load_data():
         "Threat Level": ["High", "High", "High", "Medium-High", "Medium"]
     })
 
-    # 11. Emergent Assets
+    # 10. Emergent Assets
     data["emergent_assets"] = pd.DataFrame({
         "Asset": ["ANTHRASIL", "CNJ-016 / VIGIV", "Raxibacumab"],
         "Type": ["Polyclonal IVIG", "Vaccinia IVIG", "Monoclonal Antibody"],
@@ -348,17 +363,16 @@ def load_data():
         "Role in Pathway": ["Adjunctive toxin-neutralizing", "Rescue therapy", "Antitoxin biologic"]
     })
 
-    # 12. Disease Relevance Map
     data["disease_map"] = pd.DataFrame({
         "Disease": ["Primary Immunodeficiency (PI)", "CIDP", "Myasthenia Gravis (gMG)", "ITP", "Kawasaki Disease", "Inhalational Anthrax / Vaccinia"],
         "IVIG Role": ["Core Foundational", "1st Line / Maintenance", "Rescue / Crisis Bridge", "Rescue Bridging", "Standard Acute", "Highly Specialized Countermeasure"],
         "Threat / Volume Profile": ["Largest durable pool", "High FcRn Disruption", "Critical FcRn Disruption", "Episodic volume", "Acute pediatric", "Low volume, high stockpile value"]
     })
 
-    # 13. Emergent Strategy Matrix (FIXED KeyError)
+    # 11. Emergent Strategy Matrix
     data["emergent_strategy"] = pd.DataFrame({
         "Strategic Pathway": ["Adjacency (Hyper/MCM)", "CDMO / Fill-Finish", "Partnered Specialty Ig", "Direct Pooled-IVIG"],
-        "Execution Risk Score": [2, 2, 3, 4], # 1=Low, 4=Very High
+        "Execution Risk Score": [2, 2, 3, 4], 
         "Execution Risk": ["Moderate", "Moderate", "High", "Very High"],
         "2030 TAM ($Mn)": [3308.0, 1963.6, 4282.3, 20244.6],
         "2035 Rev Potential ($Mn)": [232.8, 99.1, 41.3, 34.4],
