@@ -18,25 +18,25 @@ st.set_page_config(
     page_title="Strategic Market Research | IVIG & Emergent",
     page_icon="📈",
     layout="wide",
-    initial_sidebar_state="expanded", # CRITICAL FIX: Ensures sidebar is open
+    initial_sidebar_state="expanded", 
 )
 
 # =========================
 # THEME COLORS & LOGO LOGIC
 # =========================
-BURGUNDY = "#5B0F2E"
-BURGUNDY_DARK = "#431022"
-BURGUNDY_MID = "#7A1C41"
-BURGUNDY_SOFT = "#A45A7B"
-GOLD = "#C9A227"
-CARD = "rgba(255, 255, 255, 0.85)"
-INK = "#1A1014"
-MUTED = "#6B5B63"
-BORDER = "rgba(255, 255, 255, 0.9)"
+BURGUNDY = "#4A0C25" # Deepened for a more premium look
+BURGUNDY_DARK = "#2D0716"
+BURGUNDY_MID = "#7A143D"
+BURGUNDY_SOFT = "#A83F68"
+GOLD = "#C49A23"
+CARD = "#FFFFFF"
+INK = "#1A1A1A"
+MUTED = "#6B7280"
+BORDER = "#E5E7EB"
 
 PREVIEW_NOTE = (
-    "This dashboard is for preview purposes only. Competitor identities and specific "
-    "market share revenues have been intentionally masked and abstracted into Tiers."
+    "This deliverable is for strategic review. Competitor identities and specific "
+    "market share revenues have been intentionally abstracted into Tiers."
 )
 
 @st.cache_data
@@ -73,232 +73,138 @@ st.markdown(
     footer {{ display: none !important; }}
     header[data-testid="stHeader"] {{ background: transparent !important; box-shadow: none !important; }}
 
-    /* --- CRITICAL FIX: PERMANENT SIDEBAR LOCK & JAILBREAK UI --- */
-    /* Hide the collapse button (<) inside the sidebar so it can NEVER be closed */
-    [data-testid="stSidebarCollapseButton"] {{ 
-        display: none !important; 
-        width: 0 !important; 
-    }}
+    /* PERMANENT SIDEBAR LOCK & JAILBREAK UI */
+    [data-testid="stSidebarCollapseButton"] {{ display: none !important; width: 0 !important; }}
     
-    /* Make the open button highly visible just in case the JS fails */
     [data-testid="collapsedControl"], [data-testid="stSidebarCollapsedControl"] {{
-        display: flex !important;
-        visibility: visible !important;
-        position: fixed !important;
-        top: 15px !important;
-        left: 15px !important;
-        z-index: 999999 !important;
-        background: {BURGUNDY} !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 14px rgba(91,15,46,0.3) !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 0.4rem !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
+        display: flex !important; visibility: visible !important; position: fixed !important;
+        top: 15px !important; left: 15px !important; z-index: 999999 !important;
+        background: {BURGUNDY} !important; border: 1px solid rgba(255,255,255,0.2) !important;
+        border-radius: 8px !important; box-shadow: 0 4px 14px rgba(74,12,37,0.3) !important;
+        align-items: center !important; justify-content: center !important;
+        padding: 0.4rem !important; cursor: pointer !important; transition: all 0.2s ease !important;
     }}
     [data-testid="collapsedControl"] svg, [data-testid="stSidebarCollapsedControl"] svg {{
-        fill: white !important;
-        color: white !important;
-        width: 1.5rem !important;
-        height: 1.5rem !important;
+        fill: white !important; color: white !important; width: 1.5rem !important; height: 1.5rem !important;
     }}
 
     /* CUSTOM ELEGANT SCROLLBAR */
     ::-webkit-scrollbar {{ width: 6px; height: 6px; }}
     ::-webkit-scrollbar-track {{ background: transparent; }}
-    ::-webkit-scrollbar-thumb {{ background: rgba(91,15,46,0.15); border-radius: 10px; }}
-    ::-webkit-scrollbar-thumb:hover {{ background: rgba(91,15,46,0.3); }}
+    ::-webkit-scrollbar-thumb {{ background: rgba(74,12,37,0.15); border-radius: 10px; }}
+    ::-webkit-scrollbar-thumb:hover {{ background: rgba(74,12,37,0.3); }}
 
     /* LIVING GRADIENT BACKGROUND */
     .stApp {{
-      background: radial-gradient(circle at 15% 0%, rgba(201,162,39,0.04) 0%, transparent 40%),
-                  radial-gradient(circle at 85% 100%, rgba(91,15,46,0.03) 0%, transparent 40%),
-                  linear-gradient(180deg, #FCFAFB 0%, #F4ECEF 100%);
+      background: radial-gradient(circle at 15% 0%, rgba(196,154,35,0.03) 0%, transparent 40%),
+                  radial-gradient(circle at 85% 100%, rgba(74,12,37,0.03) 0%, transparent 40%),
+                  #FAFAFA;
       background-attachment: fixed;
     }}
 
     /* SIDEBAR REFINEMENT */
     [data-testid="stSidebar"] {{
-        background: rgba(255,255,255,0.6) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        border-right: 1px solid rgba(91,15,46,0.08) !important;
+        background: {BURGUNDY_DARK} !important;
+        border-right: 1px solid rgba(255,255,255,0.05) !important;
+    }}
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] div, [data-testid="stSidebar"] label {{
+        color: rgba(255,255,255,0.85) !important;
     }}
 
     /* SLEEK BUTTON STYLING */
     .stButton > button {{
-        background: linear-gradient(135deg, {BURGUNDY} 0%, {BURGUNDY_MID} 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 10px 24px !important;
-        font-weight: 700 !important;
-        font-size: 0.9rem !important;
-        letter-spacing: 0.02em;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-        box-shadow: 0 4px 14px rgba(91,15,46,0.2) !important;
+        background: linear-gradient(135deg, {GOLD} 0%, #A37F1C 100%) !important;
+        color: {BURGUNDY_DARK} !important;
+        border: none !important; border-radius: 8px !important;
+        padding: 10px 24px !important; font-weight: 800 !important; font-size: 0.9rem !important;
+        letter-spacing: 0.02em; transition: all 0.2s ease !important;
+        box-shadow: 0 4px 12px rgba(196,154,35,0.3) !important;
     }}
-    .stButton > button:hover {{
-        transform: translateY(-2px) !important;
-        box-shadow: 0 8px 24px rgba(91,15,46,0.3) !important;
-    }}
+    .stButton > button:hover {{ transform: translateY(-2px) !important; box-shadow: 0 6px 16px rgba(196,154,35,0.45) !important; }}
 
     /* INPUT FIELDS */
     .stTextInput input {{
-        border-radius: 8px !important;
-        border: 1px solid rgba(91,15,46,0.15) !important;
-        padding: 12px 14px !important;
-        background: rgba(255,255,255,0.8) !important;
-        transition: all 0.2s ease !important;
+        border-radius: 8px !important; border: 1px solid rgba(255,255,255,0.2) !important;
+        padding: 12px 14px !important; background: rgba(255,255,255,0.05) !important; color: white !important;
     }}
-    .stTextInput input:focus {{
-        border-color: {GOLD} !important;
-        background: #fff !important;
-        box-shadow: 0 0 0 3px rgba(201,162,39,0.15) !important;
-    }}
+    .stTextInput input:focus {{ border-color: {GOLD} !important; box-shadow: 0 0 0 2px rgba(196,154,35,0.3) !important; }}
 
     /* APP-LIKE NAVIGATION */
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] {{
-        padding: 10px 14px !important;
-        margin-bottom: 6px !important;
-        border-radius: 8px !important;
-        transition: all 0.2s ease !important;
-        cursor: pointer !important;
+        padding: 10px 14px !important; margin-bottom: 4px !important; border-radius: 8px !important;
+        transition: all 0.2s ease !important; cursor: pointer !important;
     }}
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {{
-        background: rgba(91,15,46,0.04) !important;
-        transform: translateX(3px) !important;
-    }}
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:hover {{ background: rgba(255,255,255,0.05) !important; transform: translateX(3px) !important; }}
     [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"]:has(input[checked]) {{
-         background: #ffffff !important;
-         border-left: 4px solid {BURGUNDY} !important;
-         box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+         background: rgba(255,255,255,0.1) !important; border-left: 4px solid {GOLD} !important;
     }}
-    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] p {{
-        font-weight: 600 !important;
-        font-size: 0.92rem !important;
-        color: {INK} !important;
-    }}
+    [data-testid="stSidebar"] [data-testid="stRadio"] label[data-baseweb="radio"] p {{ font-weight: 600 !important; font-size: 0.92rem !important; color: white !important; }}
 
-    /* FROSTED BRANDING HEADER */
+    /* BRANDING HEADERS */
     .smr-brand {{
-      background: rgba(255,255,255,0.7);
-      border: 1px solid {BORDER};
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.03);
-      margin-bottom: 24px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 20px;
+      margin-bottom: 24px; backdrop-filter: blur(16px);
     }}
-    
     .hero {{
-      background: linear-gradient(135deg, {BURGUNDY} 0%, {BURGUNDY_MID} 60%, {BURGUNDY_SOFT} 100%);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 34px 40px;
-      box-shadow: 0 20px 40px rgba(61,16,33,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
-      margin-bottom: 24px;
-      animation: floatIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-      position: relative;
-      overflow: hidden;
+      background: linear-gradient(135deg, {BURGUNDY} 0%, {BURGUNDY_MID} 100%);
+      color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+      padding: 34px 40px; box-shadow: 0 20px 40px rgba(74,12,37,0.15); margin-bottom: 32px;
+      position: relative; overflow: hidden;
     }}
     .hero::before {{
       content: ''; position: absolute; top: -50%; right: -10%; width: 60%; height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-      transform: rotate(-45deg);
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%); transform: rotate(-45deg);
     }}
-    .hero h2 {{ margin: 0; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 2px 10px rgba(0,0,0,0.1); position: relative; z-index: 2; }}
-    .hero p {{ position: relative; z-index: 2; }}
+    .hero h2 {{ margin: 0; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.02em; position: relative; z-index: 2; line-height: 1.2; }}
+    .hero p {{ position: relative; z-index: 2; margin-top: 12px; font-size: 1.05rem; opacity: 0.9; }}
     
     /* GLASSMORPHISM DATA CARDS */
     .metric-card {{
-      background: {CARD};
-      backdrop-filter: blur(20px);
-      border: 1px solid {BORDER};
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 12px 36px rgba(91,15,46,0.03), 0 2px 8px rgba(0,0,0,0.02);
-      min-height: 135px;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      background: {CARD}; border: 1px solid {BORDER}; border-radius: 12px; padding: 24px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02); min-height: 135px; transition: all 0.3s ease;
     }}
-    .metric-card:hover {{
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(91,15,46,0.08);
-      border-color: rgba(201,162,39,0.3);
-    }}
-    .metric-label {{
-      color: {MUTED}; font-size: 0.82rem; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-    }}
-    .metric-value {{
-      color: {BURGUNDY}; font-size: 2.6rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; margin-bottom: 12px;
-    }}
+    .metric-card:hover {{ transform: translateY(-4px); box-shadow: 0 12px 24px rgba(74,12,37,0.06); border-color: {GOLD}; }}
+    .metric-label {{ color: {MUTED}; font-size: 0.82rem; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }}
+    .metric-value {{ color: {BURGUNDY}; font-size: 2.4rem; font-weight: 800; line-height: 1; letter-spacing: -0.02em; margin-bottom: 8px; }}
     .metric-foot {{ color: {MUTED}; font-size: 0.85rem; line-height: 1.4; }}
 
     .section-card {{
-      background: {CARD};
-      backdrop-filter: blur(20px);
-      border: 1px solid {BORDER};
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 12px 36px rgba(91,15,46,0.03);
-      margin-bottom: 24px;
+      background: {CARD}; border: 1px solid {BORDER}; border-radius: 16px; padding: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-bottom: 24px;
     }}
-    .section-title {{ font-size: 1.2rem; font-weight: 800; color: {BURGUNDY}; margin-bottom: 6px; letter-spacing: -0.01em; }}
-    .section-sub {{ color: {MUTED}; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }}
+    .section-title {{ font-size: 1.25rem; font-weight: 800; color: {BURGUNDY}; margin-bottom: 6px; letter-spacing: -0.01em; }}
+    .section-sub {{ color: {MUTED}; font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; }}
     
     .insight-box {{
-      background: #ffffff;
-      border: 1px solid rgba(201,162,39,0.2);
-      border-left: 6px solid {GOLD};
-      border-radius: 12px;
-      padding: 20px 24px;
-      color: {INK};
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 24px;
-      box-shadow: 0 8px 24px rgba(201,162,39,0.05);
+      background: #ffffff; border: 1px solid rgba(196,154,35,0.2); border-left: 6px solid {GOLD};
+      border-radius: 8px; padding: 20px 24px; color: {INK}; font-size: 1rem; line-height: 1.6;
+      margin-bottom: 24px; box-shadow: 0 8px 24px rgba(196,154,35,0.05);
     }}
     
     .viewer-chip {{
-      display:inline-block; padding:6px 12px; border-radius:999px; font-size:0.75rem; font-weight:700;
-      background: rgba(91,15,46,0.06); border: 1px solid rgba(91,15,46,0.1); color: {BURGUNDY};
-      margin-top:10px; margin-bottom: 10px;
+      display:inline-block; padding:6px 14px; border-radius:999px; font-size:0.75rem; font-weight:700;
+      background: rgba(255,255,255,0.1); color: {GOLD}; margin-top:10px; margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.15);
     }}
-
-    @keyframes floatIn {{ from {{ opacity: 0; transform: translateY(16px); }} to {{ opacity: 1; transform: translateY(0px); }} }}
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 # --- JAILBREAK SCRIPT ---
-# This forces the sidebar open immediately if the browser tries to hide it
 components.html(
-    """
-    <script>
-    setTimeout(function() {
-        var expandBtn = window.parent.document.querySelector('[data-testid="collapsedControl"]');
-        if (expandBtn) {
-            expandBtn.click();
-        }
-    }, 100);
-    </script>
-    """,
+    """<script>setTimeout(function() {var e = window.parent.document.querySelector('[data-testid="collapsedControl"]'); if(e) e.click();}, 100);</script>""",
     height=0, width=0
 )
 
 # =========================
 # UI Component Helpers
 # =========================
-def fmt_mn(value: float, mult: float = 1.0) -> str:
+def fmt_mn(value: float) -> str:
     if pd.isna(value): return "—"
-    adj_val = value * mult
-    if abs(adj_val) >= 1000: return f"≈${adj_val/1000:.1f}B"
-    return f"≈${adj_val:,.0f}M"
+    if abs(value) >= 1000: return f"≈${value/1000:.1f}B"
+    return f"≈${value:,.0f}M"
 
 def card_metric(label: str, value: str, foot: str):
     st.markdown(f'<div class="metric-card"><div class="metric-label">{label}</div><div class="metric-value">{value}</div><div class="metric-foot">{foot}</div></div>', unsafe_allow_html=True)
@@ -318,13 +224,13 @@ def chart_theme(fig):
         hoverlabel=dict(bgcolor="white", font_size=13, font_family="'Plus Jakarta Sans', sans-serif", bordercolor=BORDER),
     )
     fig.update_xaxes(showgrid=False, linecolor="rgba(0,0,0,0.05)", tickfont=dict(size=11, color=MUTED))
-    fig.update_yaxes(gridcolor="rgba(91,15,46,0.04)", zeroline=False, tickfont=dict(size=11, color=MUTED))
+    fig.update_yaxes(gridcolor="rgba(0,0,0,0)", zeroline=False, tickfont=dict(size=11, color=MUTED))
     return fig
 
 def brand_sidebar():
     if LOGO_B64:
-        st.sidebar.markdown(f'<img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:48px; width:auto; margin-bottom:12px;" />', unsafe_allow_html=True)
-    st.sidebar.markdown(f'<div class="smr-brand"><h1 style="color:{BURGUNDY}; margin:0; font-size:1.1rem; font-weight:800; letter-spacing:-0.02em; line-height:1.2;">Strategic Market Research</h1><p style="color:{MUTED}; margin:4px 0 0 0; font-size:0.82rem; font-weight:500;">Emergent BioSolutions<br>Advisory Board</p></div>', unsafe_allow_html=True)
+        st.sidebar.markdown(f'<img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:42px; width:auto; margin-bottom:12px; filter: brightness(0) invert(1);" />', unsafe_allow_html=True)
+    st.sidebar.markdown(f'<div class="smr-brand"><h1 style="color:white; margin:0; font-size:1.15rem; font-weight:800; line-height:1.2;">Strategic Market Research</h1><p style="color:rgba(255,255,255,0.7); margin:4px 0 0 0; font-size:0.85rem; font-weight:500;">Emergent BioSolutions<br>Advisory Board</p></div>', unsafe_allow_html=True)
 
 def page_header(title: str, subtitle: str):
     if LOGO_B64:
@@ -332,10 +238,10 @@ def page_header(title: str, subtitle: str):
     else:
         logo_html = ""
         
-    st.markdown(f'<div class="hero"><div class="kicker" style="color:var(--gold); font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; display:inline-block; z-index:2; position:relative;">Strategic Market Research</div><div class="hero-head">{logo_html}<h2>{title}</h2></div><p style="font-size: 1rem; color: rgba(255,255,255,0.9); margin:0; max-width:900px; line-height:1.5; z-index:2; position:relative;">{subtitle}</p></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="hero"><div style="color:{GOLD}; font-size:0.75rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; z-index:2; position:relative;">Confidential Strategic Advisory</div><div class="hero-head">{logo_html}<h2>{title}</h2></div><p>{subtitle}</p></div>', unsafe_allow_html=True)
 
 def page_footer():
-    st.markdown(f'<div style="margin-top:30px; text-align:center; padding: 24px; color:{MUTED}; font-size:0.8rem; border-top: 1px solid rgba(0,0,0,0.06);"><strong>Strategic Market Research</strong> &copy; {datetime.now().year} — {PREVIEW_NOTE}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="margin-top:40px; text-align:center; padding: 24px; color:{MUTED}; font-size:0.85rem; border-top: 1px solid {BORDER};"><strong>Strategic Market Research</strong> &copy; {datetime.now().year} — {PREVIEW_NOTE}</div>', unsafe_allow_html=True)
 
 def log_access(name: str, email: str):
     log_path = Path("smr_ivig_access_log.csv")
@@ -349,13 +255,13 @@ def log_access(name: str, email: str):
     except Exception: pass
 
 # =========================
-# DATA ENGINE (Built-in, Fully Expanded)
+# DATA ENGINE (Definitive Base Case)
 # =========================
 @st.cache_data(show_spinner=False)
 def load_data():
     data = {}
     
-    # 1. Market Dynamics & Forecast
+    # 1. Market Dynamics
     data["market"] = pd.DataFrame({
         "Year": ["2025", "2027", "2029", "2031", "2033", "2035"],
         "Revenue ($Mn)": [13090.5, 14545.9, 16104.7, 17937.1, 19830.4, 21962.2],
@@ -368,27 +274,20 @@ def load_data():
     data["indications"] = pd.DataFrame({
         "Indication": ["Immunology (PI)", "Neurology (CIDP)", "Neurology (MG)", "Hematology (ITP)", "Others / Off-Label"],
         "2025 Rev ($Mn)": [2164.0, 2590.3, 358.5, 128.0, 6614.6],
-        "2030 Rev ($Mn)": [2876.4, 3012.0, 380.0, 140.7, 8984.7],
         "2035 Rev ($Mn)": [3821.2, 3535.1, 412.8, 153.1, 12171.2],
         "CAGR (25-35)": ["5.8%", "3.2%", "1.4%", "1.8%", "6.3%"],
-        "Disruption Risk": ["Low", "High (FcRn)", "Critical (FcRn)", "Moderate", "Low"]
+        "Disruption Risk": ["Low", "High", "Critical", "Moderate", "Low"]
     })
     
     # 3. Patient Funnel (Epidemiology)
     data["funnel"] = pd.DataFrame({
-        "Indication": ["PI & Serious Infection", "CIDP", "Myasthenia Gravis", "Kawasaki Disease"],
-        "US Modeled Cases": [54560, 52514, 65643, 3069],
-        "Diagnosed (%)": [72.0, 78.0, 78.0, 95.0],
-        "Treated (%)": [86.0, 70.0, 78.0, 90.0],
-        "Eligible (%)": [92.0, 75.0, 100.0, 100.0],
-        "IVIG Penetration (%)": [65.0, 60.0, 40.0, 90.0],
-        "Annual Dose (g)": [450, 1000, 180, 36]
+        "Stage": ["Total Diagnosed", "Medically Treated", "IVIG Eligible", "Actual IVIG Penetration"],
+        "Patients": [54560, 46921, 43167, 28058] # Example cascade for PI
     })
     
-    # 4. Standard of Care Cost (Context for Psychedelics/Neurology)
+    # 4. Standard of Care Cost
     data["soc"] = pd.DataFrame({
         "Modality": ["Oral AD / Augmentation", "Psychotherapy", "TMS / ECT", "Spravato / Ketamine", "High-Dose IVIG (CIDP)"],
-        "Treatment Mix (%)": [35.0, 15.0, 10.0, 40.0, 100.0],
         "Annual Cost per Patient ($)": [2000, 3500, 8500, 23000, 50000]
     })
     
@@ -396,66 +295,59 @@ def load_data():
     data["value_chain"] = pd.DataFrame({
         "Value Chain Layer": ["Plasma Collection", "Fractionation", "Fill-Finish (CDMO)", "Brand & Distribution"],
         "Revenue Split (%)": [24.0, 34.0, 12.0, 30.0],
-        "EBITDA Margin (%)": [16.0, 28.0, 20.0, 18.0],
-        "Capital Risk": ["Very High", "Extreme ($400M+)", "Moderate", "Low"]
+        "EBITDA Margin (%)": [16.0, 28.0, 20.0, 18.0]
     })
 
-    # 6. Delivery Economics (Scalability)
-    data["economics"] = pd.DataFrame({
-        "Care Model Paradigm": ["All-Day Clinic (Baseline)", "Half-Day Clinic", "Short Clinic", "Take-Home Low-Dose"],
-        "Duration Reduction (%)": [0, 65, 80, 95],
-        "Cost Compression (%)": [0, 40, 60, 85],
-        "Throughput Expansion": [1.0, 2.5, 5.0, 10.0]
+    # 6. Delivery Economics (Waterfall)
+    data["waterfall"] = pd.DataFrame({
+        "Measure": ["absolute", "relative", "relative", "relative", "total"],
+        "Label": ["All-Day Clinic", "Half-Day Savings", "Short Clinic Savings", "Take-Home Savings", "Take-Home Model"],
+        "Value": [1635, -780, -435, -115, 305]
     })
     
-    # 7. Clinical Pipeline (FcRn Risk)
+    # 7. Clinical Pipeline
     data["pipeline"] = pd.DataFrame({
         "Asset / Molecule": ["Efgartigimod (Vyvgart)", "Rozanolixizumab", "Nipocalimab", "Batoclimab", "Pozelimab"],
         "Mechanism": ["FcRn Inhibitor", "FcRn Inhibitor", "FcRn Inhibitor", "FcRn Inhibitor", "Complement C5"],
         "Key Indications": ["MG, CIDP, ITP", "MG", "MG, SLE", "MG (China)", "MG"],
-        "Status / Launch": ["Approved (Expanding)", "Approved", "Phase 3 / Appr", "Phase 3", "2026 Submission"]
+        "Status": ["Approved (Expanding)", "Approved", "Phase 3 / Appr", "Phase 3", "2026 Submission"]
     })
 
     # 8. Regional
     data["regions"] = pd.DataFrame({
         "Region": ["United States", "Asia Pacific", "Europe", "Latin America", "Middle East & Africa"],
-        "2025 Rev ($Mn)": [4387.7, 4218.6, 2816.5, 860.5, 807.2],
         "2035 Rev ($Mn)": [7527.3, 7010.2, 4488.7, 1505.6, 1430.5],
-        "CAGR (%)": [5.5, 5.2, 4.8, 5.8, 5.9],
-        "Supply Coverage": [2.94, 0.48, 0.92, 0.35, 0.20],
         "Map Proxy": ["USA", "CHN", "DEU", "BRA", "ZAF"]
     })
 
-    # 9. Competitors (MASKED for Security)
+    # 9. Competitors
     data["competitors"] = pd.DataFrame({
         "Market Tier": ["Tier 1 Leaders (Top 2)", "Tier 2 Majors (Next 2)", "Mid-Tier Challengers"],
-        "Market Share (%)": [47.0, 33.0, 20.0],
-        "Strategic Moat": ["Extreme (400+ Centers)", "High (Integrated)", "Low (3rd Party Plasma)"]
+        "Market Share (%)": [47.0, 33.0, 20.0]
     })
 
-    # 10. Emergent Strategy Matrix
+    # 10. Emergent Strategy Matrix (Bubble Data)
     data["emergent"] = pd.DataFrame({
         "Strategic Pathway": ["Adjacency (Hyper/MCM)", "CDMO / Fill-Finish", "Partnered Specialty Ig", "Direct Pooled-IVIG"],
+        "Execution Risk Score": [2, 2, 3, 4], # 1=Low, 4=Very High
+        "Execution Risk": ["Moderate", "Moderate", "High", "Very High"],
         "2030 TAM ($Mn)": [3308.0, 1963.6, 4282.3, 20244.6],
         "2035 Rev Potential ($Mn)": [232.8, 99.1, 41.3, 34.4],
-        "EBITDA Target": ["28.0%", "22.0%", "18.0%", "14.0%"],
-        "Emergent Fit": ["High", "Moderate", "Moderate", "Low"],
-        "Execution Risk": ["Moderate", "Moderate", "High", "Very High"]
     })
 
     return data
 
 # =========================
-# RENDER VIEWS (11 Pages)
+# RENDER VIEWS
 # =========================
-def render_overview(data, mult_factor):
-    page_header("Executive Overview", "A curated view of global IVIG market size, growth direction, and structural dynamics.")
+def render_overview(data):
+    page_header("Executive Overview", "A definitive view of global IVIG market size, growth direction, and structural dynamics.")
     
     c1, c2, c3, c4 = st.columns(4)
     with c1: card_metric("2025 Market Revenue", fmt_mn(13090.5), "Baseline revenue actuals.")
-    with c2: card_metric("2035 Market Revenue", fmt_mn(21962.2, mult_factor), "Directional ceiling under assumptions.")
-    with c3: card_metric("10-Year CAGR", "5.3%", "Driven by volume and price mix.")
-    with c4: card_metric("Market Concentration", "80.0%", "Share held by Top 4 Entities.")
+    with c2: card_metric("2035 Market Revenue", fmt_mn(21962.2), "Directional ceiling under base case.")
+    with c3: card_metric("10-Year CAGR", "5.3%", "Driven aggressively by price mix.")
+    with c4: card_metric("Market Concentration", "80.0%", "Share securely held by Top 4 Entities.")
 
     insight_text = "<strong>Strategic View:</strong> The market remains structurally bottlenecked. Growth is dictated not simply by patient demand, but by the physical limits of global plasma collection and extreme CAPEX requirements."
     st.markdown(f'<div class="insight-box">{insight_text}</div>', unsafe_allow_html=True)
@@ -463,11 +355,10 @@ def render_overview(data, mult_factor):
     col1, col2 = st.columns([1.6, 1])
     with col1:
         section_open("Global Market Trajectory", "Divergence between Revenue and physical Volume.")
-        df_m = data["market"].copy()
-        df_m["Revenue ($Mn)"] = df_m["Revenue ($Mn)"] * mult_factor
+        df_m = data["market"]
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Revenue ($Mn)"], mode="lines+markers", name="Market revenue ($Mn)", line=dict(color=BURGUNDY, width=3), marker=dict(size=8, color=BURGUNDY)))
-        fig.add_trace(go.Bar(x=df_m["Year"], y=df_m["Volume (Mn g)"], name="Actual Volume (Mn g)", marker_color=GOLD, opacity=0.6, yaxis="y2"))
+        fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Revenue ($Mn)"], mode="lines+markers", name="Market revenue ($Mn)", line=dict(color=BURGUNDY, width=3), marker=dict(size=8)))
+        fig.add_trace(go.Bar(x=df_m["Year"], y=df_m["Volume (Mn g)"], name="Actual Volume (Mn g)", marker_color=GOLD, opacity=0.7, yaxis="y2"))
         fig.update_layout(yaxis=dict(title="$Mn"), yaxis2=dict(title="Volume (g)", overlaying="y", side="right", showgrid=False), bargap=0.55)
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
@@ -488,21 +379,27 @@ def render_epidemiology(data):
     
     col1, col2 = st.columns([1, 1])
     with col1:
-        section_open("Patient Funnel Attrition (US Modeled)", "Drop-off from theoretical cases to IVIG-penetrated base.")
-        df_melt = df_funnel.melt(id_vars=["Indication"], value_vars=["Diagnosed (%)", "Treated (%)", "Eligible (%)", "IVIG Penetration (%)"], var_name="Funnel Stage", value_name="Percentage")
-        fig = px.bar(df_melt, x="Indication", y="Percentage", color="Funnel Stage", barmode="group", color_discrete_sequence=[BURGUNDY_DARK, BURGUNDY_MID, GOLD, BURGUNDY_SOFT])
-        fig.update_layout(yaxis_title="Patient Capture (%)", xaxis_title="")
+        section_open("Patient Funnel Attrition (Primary Immunodeficiency Model)", "Severe drop-off to actual IVIG-penetrated base.")
+        # CONSULTING UPGRADE: Funnel Chart
+        fig = go.Figure(go.Funnel(
+            y=df_funnel["Stage"],
+            x=df_funnel["Patients"],
+            textinfo="value+percent initial",
+            marker=dict(color=[BURGUNDY, BURGUNDY_MID, BURGUNDY_SOFT, GOLD])
+        ))
+        fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
-        section_open("Volumetric Consumption Index", "The 'Volume Sink' reality.")
-        fig = px.bar(df_funnel.sort_values("Annual Dose (g)"), x="Annual Dose (g)", y="Indication", orientation="h", color="Annual Dose (g)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
+        section_open("Volumetric Consumption Index", "The 'Volume Sink' reality by indication.")
+        df_dose = pd.DataFrame({"Indication": ["PI", "CIDP", "MG", "Kawasaki"], "Annual Dose (g)": [450, 1000, 180, 36]})
+        fig = px.bar(df_dose.sort_values("Annual Dose (g)"), x="Annual Dose (g)", y="Indication", orientation="h", color="Annual Dose (g)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
         fig.update_layout(coloraxis_showscale=False, xaxis_title="Grams / Patient / Year", yaxis_title="")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
-    st.markdown('<div class="insight-box"><strong>The Volume Sink Reality:</strong> CIDP is the ultimate volume sink of the industry, consuming 1,000 grams annually per patient. A single adult CIDP patient consumes the volumetric equivalent of nearly 28 pediatric Kawasaki patients.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="insight-box"><strong>The Volume Sink Reality:</strong> CIDP is the ultimate volume sink of the industry. A single adult CIDP patient consumes the volumetric equivalent of nearly 28 pediatric Kawasaki patients, magnifying the impact of any market disruption.</div>', unsafe_allow_html=True)
     page_footer()
 
 def render_soc(data):
@@ -512,82 +409,96 @@ def render_soc(data):
     
     col1, col2 = st.columns([1.2, 1])
     with col1:
-        section_open("Annual Cost Burden per Patient ($)", "Comparing standard psychiatric/neurological interventions vs IVIG.")
+        section_open("Annual Cost Burden per Patient ($)", "Comparing standard interventions vs IVIG.")
         fig = px.bar(df_soc.sort_values("Annual Cost per Patient ($)"), x="Annual Cost per Patient ($)", y="Modality", orientation="h", color="Annual Cost per Patient ($)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
         fig.update_layout(coloraxis_showscale=False, xaxis_title="Cost ($)", yaxis_title="")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
-        section_open("Treatment Mix Data", "Modality segmentation.")
+        section_open("Treatment Modality Economics", "Cost segmentation matrix.")
         st.dataframe(df_soc, use_container_width=True, hide_index=True)
         section_close()
         
     st.markdown('<div class="insight-box"><strong>Economic Baseline:</strong> High-dose IVIG for conditions like CIDP establishes an extreme cost baseline ($50,000+ purely in drug costs). Payers are actively incentivizing step-throughs to targeted biologics to cap their volumetric financial exposure.</div>', unsafe_allow_html=True)
     page_footer()
 
-def render_dynamics(data, mult_factor):
+def render_dynamics(data):
     page_header("Market Dynamics & Supply Limits", "The fundamental reality of plasma economics and price realization.")
     
     col1, col2 = st.columns([1.5, 1])
     with col1:
         section_open("Supply vs Demand Gap", "Pre-erosion demand heavily outstrips available supply.")
-        df_m = data["market"].copy()
+        df_m = data["market"]
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Pre-Erosion Demand (Mn g)"], mode="lines", name="Pre-Erosion Demand (Mn g)", line=dict(color=BURGUNDY, width=3, dash='dash')))
-        fig.add_trace(go.Bar(x=df_m["Year"], y=df_m["Available Supply (Mn g)"], name="Available Supply (Mn g)", marker_color=GOLD, opacity=0.7))
-        fig.update_layout(yaxis=dict(title="Volume (Mn g)"), bargap=0.4)
+        # Fill between demand and supply to show the gap visually
+        fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Available Supply (Mn g)"], mode="lines", name="Available Supply", line=dict(color=GOLD, width=2)))
+        fig.add_trace(go.Scatter(x=df_m["Year"], y=df_m["Pre-Erosion Demand (Mn g)"], mode="lines", name="Unconstrained Demand", fill='tonexty', fillcolor='rgba(91,15,46,0.1)', line=dict(color=BURGUNDY, width=3, dash='dash')))
+        fig.update_layout(yaxis=dict(title="Volume (Mn g)"), hovermode="x unified")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
         section_open("Average Realized ASP Scaling", "Price per Gram scaling acts as the clearing mechanism.")
-        df_p = pd.DataFrame({"Year": ["2025", "2030", "2035"], "ASP ($/g)": [43.8, 48.6, 52.4 * mult_factor]})
-        fig = px.line(df_p, x="Year", y="ASP ($/g)", markers=True, color_discrete_sequence=[BURGUNDY_DARK])
+        df_p = pd.DataFrame({"Year": ["2025", "2030", "2035"], "ASP ($/g)": [43.8, 48.6, 52.4]})
+        fig = px.line(df_p, x="Year", y="ASP ($/g)", markers=True, color_discrete_sequence=[BURGUNDY])
+        fig.update_traces(line=dict(width=4), marker=dict(size=10))
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
 
     st.markdown('<div class="insight-box"><strong>The Plasma Ceiling:</strong> Realized pricing continues to aggressively climb because upstream plasma availability cannot meet raw epidemiological demand. If emerging therapies fail to displace IVIG in neurology, the supply chain will plunge back into catastrophic global shortages.</div>', unsafe_allow_html=True)
     page_footer()
 
-def render_indications(data, mult_factor):
+def render_indications(data):
     page_header("Indication & Disruption Risk", "How targeted biologics (FcRn inhibitors) threaten established neurology pools.")
     
-    df_ind = data["indications"].copy()
-    df_ind["2035 Rev ($Mn)"] = df_ind["2035 Rev ($Mn)"] * mult_factor
+    df_ind = data["indications"]
     
-    col1, col2 = st.columns([1, 1.3])
+    col1, col2 = st.columns([1.2, 1])
     with col1:
-        section_open("2035 Revenue Composition", "Modeled distribution post-disruption.")
-        fig = px.pie(df_ind, values="2035 Rev ($Mn)", names="Indication", hole=0.6, color_discrete_sequence=[BURGUNDY, BURGUNDY_MID, GOLD, BURGUNDY_SOFT, "#E1D2DA"])
+        section_open("Indication Risk Matrix (2035)", "Sizing the market by disruption vulnerability.")
+        # CONSULTING UPGRADE: Treemap
+        fig = px.treemap(df_ind, path=['Disruption Risk', 'Indication'], values='2035 Rev ($Mn)', color='Disruption Risk',
+                         color_discrete_map={"Critical": BURGUNDY_DARK, "High": BURGUNDY, "Moderate": BURGUNDY_SOFT, "Low": GOLD})
+        fig.update_layout(margin=dict(t=20, l=10, r=10, b=10))
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
-        section_open("Substitution Risk Matrix", "Vulnerability assessment by indication.")
-        st.dataframe(df_ind, use_container_width=True, hide_index=True)
+        section_open("Substitution Risk Database", "Granular assessment by indication.")
+        st.dataframe(df_ind[["Indication", "2035 Rev ($Mn)", "CAGR (25-35)", "Disruption Risk"]], use_container_width=True, hide_index=True)
         section_close()
         
-    st.markdown('<div class="insight-box"><strong>Strategic Divergence:</strong> Primary Immunodeficiency (PI) remains the ultimate defensive moat. Neurological applications are lucrative but highly vulnerable to FcRn displacement.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="insight-box"><strong>Strategic Divergence:</strong> Primary Immunodeficiency (PI) remains the ultimate defensive moat (Low Risk). Neurological applications are lucrative but highly vulnerable to FcRn displacement (High/Critical Risk).</div>', unsafe_allow_html=True)
     page_footer()
 
 def render_delivery_econ(data):
     page_header("Delivery Innovation & Economics", "Care-model cost and capacity fundamentally divide scalable vs non-scalable modalities.")
     
-    df_econ = data["economics"]
+    df_waterfall = data["waterfall"]
     
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns([1.2, 1])
     with col1:
-        section_open("Cost & Duration Compression", "Take-home models annihilate infrastructure drag.")
-        df_melt = df_econ.melt(id_vars=["Care Model Paradigm"], value_vars=["Duration Reduction (%)", "Cost Compression (%)"], var_name="Metric", value_name="Percentage")
-        fig = px.bar(df_melt, x="Care Model Paradigm", y="Percentage", color="Metric", barmode="group", color_discrete_sequence=[BURGUNDY, GOLD])
-        fig.update_layout(xaxis_title="", yaxis_title="Reduction (%)")
+        section_open("Care Model Cost Compression", "Step-down economic impact of delivery innovation.")
+        # CONSULTING UPGRADE: Waterfall Chart
+        fig = go.Figure(go.Waterfall(
+            orientation="v",
+            measure=df_waterfall["Measure"],
+            x=df_waterfall["Label"],
+            y=df_waterfall["Value"],
+            connector={"line": {"color": "rgba(0,0,0,0.1)", "width": 1}},
+            decreasing={"marker": {"color": GOLD}},
+            increasing={"marker": {"color": BURGUNDY}},
+            totals={"marker": {"color": BURGUNDY_DARK}}
+        ))
+        fig.update_layout(yaxis_title="Base Visit Cost ($)", showlegend=False)
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
         section_open("Throughput Expansion Multiplier", "Theoretical patient volume scalability.")
-        fig = px.line(df_econ, x="Care Model Paradigm", y="Throughput Expansion", markers=True, color_discrete_sequence=[BURGUNDY_DARK])
+        df_econ = data["economics"]
+        fig = px.line(df_econ, x="Care Model Paradigm", y="Throughput Expansion", markers=True, color_discrete_sequence=[BURGUNDY])
         fig.update_traces(line=dict(width=4), marker=dict(size=10))
         fig.update_layout(xaxis_title="", yaxis_title="Throughput Multiplier (x)")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
@@ -602,6 +513,7 @@ def render_pipeline(data):
     df_pipe = data["pipeline"]
     
     section_open("Late-Stage Targeted Therapeutics Threat", "Monoclonal antibodies and Complement inhibitors targeting the Autoimmune pool.")
+    # Styled dataframe for premium look
     st.dataframe(df_pipe, use_container_width=True, hide_index=True)
     section_close()
     
@@ -616,31 +528,32 @@ def render_value_chain(data):
     col1, col2 = st.columns([1, 1.2])
     with col1:
         section_open("Gross Revenue Split", "Top-line distribution.")
-        fig = px.pie(df_vc, values="Revenue Split (%)", names="Value Chain Layer", hole=0.5, color_discrete_sequence=[BURGUNDY, GOLD, BURGUNDY_MID, BURGUNDY_SOFT])
+        fig = px.pie(df_vc, values="Revenue Split (%)", names="Value Chain Layer", hole=0.6, color_discrete_sequence=[BURGUNDY, GOLD, BURGUNDY_MID, BURGUNDY_SOFT])
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
-        section_open("EBITDA & Capital Risk Profiling", "Margin vs Moat.")
-        st.dataframe(df_vc, use_container_width=True, hide_index=True)
+        section_open("EBITDA Profiling", "Margin comparison across the ecosystem.")
+        fig = px.bar(df_vc.sort_values("EBITDA Margin (%)"), x="EBITDA Margin (%)", y="Value Chain Layer", orientation="h", color="EBITDA Margin (%)", color_continuous_scale=[[0, GOLD], [1, BURGUNDY]])
+        fig.update_layout(coloraxis_showscale=False, xaxis_title="EBITDA Margin (%)", yaxis_title="")
+        st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     st.markdown('<div class="insight-box"><strong>Value Migration:</strong> Fractionation commands the highest EBITDA margin (28%) due to virtually insurmountable barriers to entry. However, Formulation/Fill-Finish offers highly attractive margins (20%) with substantially lower raw capital risk, representing an optimal strategic insertion point.</div>', unsafe_allow_html=True)
     page_footer()
 
-def render_regions(data, mult_factor):
+def render_regions(data):
     page_header("Regional Analysis", "Geographic opportunity, import dependency, and pricing power.")
 
-    df_reg = data["regions"].copy()
-    df_reg["2035 Rev ($Mn)"] = df_reg["2035 Rev ($Mn)"] * mult_factor
+    df_reg = data["regions"]
 
     section_open("Global Opportunity Heatmap (2035)", "Intensity of 2035 IVIG market opportunity.")
     fig = px.choropleth(
         df_reg, locations="Map Proxy", color="2035 Rev ($Mn)", 
-        color_continuous_scale=[[0, "#FAF5F7"], [0.5, GOLD], [1, BURGUNDY]],
+        color_continuous_scale=[[0, "#FAFAFA"], [0.5, GOLD], [1, BURGUNDY]],
         hover_name="Region", projection="natural earth"
     )
-    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), geo=dict(showframe=False, showcoastlines=True, coastlinecolor="rgba(0,0,0,0.08)", projection_scale=1.1, bgcolor='rgba(0,0,0,0)'))
+    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), geo=dict(showframe=False, showcoastlines=True, coastlinecolor="rgba(0,0,0,0.1)", projection_scale=1.1, bgcolor='rgba(0,0,0,0)'))
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
     section_close()
 
@@ -660,12 +573,12 @@ def render_regions(data, mult_factor):
 def render_competition(data):
     page_header("Competitive Landscape", "Preview of market control. Player identities and exact revenues have been securely masked.")
 
-    df_comp = data["competitors"].copy()
+    df_comp = data["competitors"]
 
     col1, col2 = st.columns([1, 1.2])
     with col1:
         section_open("Market Concentration", "Aggregated Share by Tier.")
-        fig = px.pie(df_comp, values="Market Share (%)", names="Market Tier", hole=0.6, color_discrete_sequence=[BURGUNDY, BURGUNDY_MID, GOLD])
+        fig = px.pie(df_comp, values="Market Share (%)", names="Market Tier", hole=0.6, color_discrete_sequence=[BURGUNDY_DARK, BURGUNDY_MID, GOLD])
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
 
@@ -677,11 +590,10 @@ def render_competition(data):
     st.markdown('<div class="insight-box"><strong>Strategic Lockout:</strong> The Top 4 entities effectively barricade the core pooled-IVIG space against non-integrated entrants due to upstream plasma collection ownership.</div>', unsafe_allow_html=True)
     page_footer()
 
-def render_emergent(data, mult_factor):
+def render_emergent(data):
     page_header("Emergent Strategy Matrix", "Analyzing optimal entry vectors, bypassing direct IVIG competition.")
     
-    df_em = data["emergent"].copy()
-    df_em["2035 Rev Potential ($Mn)"] = df_em["2035 Rev Potential ($Mn)"] * mult_factor
+    df_em = data["emergent"]
 
     c1, c2, c3 = st.columns(3)
     with c1: card_metric("Best Margin Profile", "Hyperimmunes", "28% EBITDA Target.")
@@ -690,14 +602,17 @@ def render_emergent(data, mult_factor):
 
     col1, col2 = st.columns([1.5, 1])
     with col1:
-        section_open("Strategic Pathway Economics", "Evaluating 2035 Revenue Potential vs Risk.")
-        fig = px.bar(df_em, x="Strategic Pathway", y="2035 Rev Potential ($Mn)", color="Execution Risk", color_discrete_map={"Moderate": GOLD, "High": BURGUNDY_MID, "Very High": BURGUNDY_DARK})
+        section_open("Strategic Pathway Matrix", "Plotting Execution Risk vs Revenue Potential.")
+        # CONSULTING UPGRADE: Bubble Chart
+        fig = px.scatter(df_em, x="Execution Risk Score", y="2035 Rev Potential ($Mn)", size="2030 TAM ($Mn)", color="Strategic Pathway", 
+                         color_discrete_sequence=[BURGUNDY, GOLD, BURGUNDY_MID, BURGUNDY_DARK], hover_name="Strategic Pathway", size_max=50)
+        fig.update_xaxes(tickvals=[1, 2, 3, 4], ticktext=["Low", "Moderate", "High", "Very High"], title="Execution Risk")
         st.plotly_chart(chart_theme(fig), use_container_width=True, config={"displayModeBar": False})
         section_close()
         
     with col2:
-        section_open("Strategy Assessment Matrix", "Financials & viability.")
-        st.dataframe(df_em.drop(columns=["2030 TAM ($Mn)"]), use_container_width=True, hide_index=True)
+        section_open("Strategy Assessment", "Financials & viability.")
+        st.dataframe(df_em[["Strategic Pathway", "2035 Rev Potential ($Mn)", "EBITDA Target"]], use_container_width=True, hide_index=True)
         section_close()
 
     st.markdown('<div class="insight-box"><strong>Recommendation: Double-Down on Adjacencies.</strong> Emergent must fiercely avoid direct competition with integrated plasma leaders. Instead, dominate the high-margin Serviceable Available Market spanning hyperimmune products and CDMO processing.</div>', unsafe_allow_html=True)
@@ -726,7 +641,7 @@ def check_access():
 
     brand_sidebar()
     with st.sidebar:
-        st.markdown("<h3 style='color:var(--ink); font-weight:700; margin-bottom:12px;'>🔐 Access Login</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:white; font-weight:800; margin-bottom:12px;'>🔐 Access Login</h3>", unsafe_allow_html=True)
         with st.form("login_form"):
             name = st.text_input("Name*")
             email = st.text_input("Email*")
@@ -740,7 +655,7 @@ def check_access():
         if not clean_name or not clean_email or not clean_pass:
             st.sidebar.warning("⚠️ Please fill in your Name, Email, and Access Code.")
         elif clean_pass != expected_password:
-            st.sidebar.error("❌ Invalid Access Code. Please try again.")
+            st.sidebar.error("❌ Invalid Access Code.")
         else:
             st.session_state.authenticated = True
             st.session_state.viewer_name = clean_name
@@ -750,8 +665,8 @@ def check_access():
 
     if not st.session_state.authenticated:
         if LOGO_B64:
-            st.markdown(f'<div style="text-align:center; margin-top:10vh;"><img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:60px; margin-bottom:20px;" /></div>', unsafe_allow_html=True)
-        st.markdown("""<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:30vh;"><h2 style='color:var(--burgundy); font-weight:800; font-size:2.4rem;'>Dashboard Secured</h2><p style='color:var(--muted); font-size:1.1rem;'>Please use the sidebar to authenticate and load the market view.</p></div>""", unsafe_allow_html=True)
+            st.markdown(f'<div style="text-align:center; margin-top:15vh;"><img src="data:image/svg+xml;base64,{LOGO_B64}" style="height:65px; margin-bottom:20px;" /></div>', unsafe_allow_html=True)
+        st.markdown(f"""<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:30vh;"><h2 style='color:{BURGUNDY}; font-weight:800; font-size:2.6rem; letter-spacing:-0.02em;'>Dashboard Secured</h2><p style='color:{MUTED}; font-size:1.1rem; margin-top:10px;'>Please use the sidebar to authenticate and load the strategic report.</p></div>""", unsafe_allow_html=True)
         st.stop()
     return True
 
@@ -767,12 +682,7 @@ viewer_name = st.session_state.get("viewer_name", "Guest")
 viewer_company = st.session_state.get("viewer_company", "")
 viewer_chip = viewer_name + (f" | {viewer_company}" if viewer_company else "")
 st.sidebar.markdown(f'<div class="viewer-chip">Verified: {viewer_chip}</div>', unsafe_allow_html=True)
-
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
-st.sidebar.markdown("<p style='font-weight:700; color:var(--burgundy); margin-bottom:4px;'>⚙️ Scenario Engine</p>", unsafe_allow_html=True)
-slider_val = st.sidebar.slider("FcRn Substitution Impact", min_value=-15, max_value=25, value=0, step=5, format="%d%%")
-# Invert logic: If substitution goes UP, overall IVIG revenue multiplier goes DOWN.
-engine_multiplier = 1.0 - (slider_val / 200.0) 
 
 page = st.sidebar.radio(
     "",
@@ -798,15 +708,15 @@ if st.sidebar.button("End Session", use_container_width=True):
     st.rerun()
 
 # Router
-if page == "Executive Overview": render_overview(data, engine_multiplier)
+if page == "Executive Overview": render_overview(data)
 elif page == "Epidemiology & Patient Funnel": render_epidemiology(data)
 elif page == "Current SOC & Pricing Landscape": render_soc(data)
-elif page == "Market Dynamics & Supply": render_dynamics(data, engine_multiplier)
-elif page == "Indication & Disruption Risk": render_indications(data, engine_multiplier)
+elif page == "Market Dynamics & Supply": render_dynamics(data)
+elif page == "Indication & Disruption Risk": render_indications(data)
 elif page == "Delivery Innovation & Economics": render_delivery_econ(data)
 elif page == "Clinical Pipeline & FcRn Risk": render_pipeline(data)
 elif page == "Value Chain & Profit Pools": render_value_chain(data)
-elif page == "Regional Analysis": render_regions(data, engine_multiplier)
+elif page == "Regional Analysis": render_regions(data)
 elif page == "Competitive Landscape": render_competition(data)
-elif page == "Emergent Strategy": render_emergent(data, engine_multiplier)
+elif page == "Emergent Strategy": render_emergent(data)
 elif page == "Methodology & Coverage": render_methodology(data)
